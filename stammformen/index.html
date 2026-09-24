@@ -132,6 +132,12 @@
   .card-top{text-align:center;display:grid;gap:6px;}
   .infinitive{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:clamp(1.8rem,7vw,2.6rem);text-wrap:balance;}
   .gloss{font-style:italic;color:var(--ink-muted);font-size:.95rem;min-height:1.2em;}
+  .example{
+    text-align:left;margin-top:4px;padding:10px 14px;border-radius:10px;
+    background:var(--royal-soft);border:1px solid var(--rule);display:grid;gap:3px;
+  }
+  .example-de{font-size:.92rem;color:var(--ink);}
+  .example-en{font-size:.82rem;font-style:italic;color:var(--ink-muted);}
 
   .rows{display:grid;gap:14px;}
   .row{display:grid;gap:8px;padding:12px;border-radius:12px;border:1px solid var(--rule);background:var(--paper);transition:background .15s ease,border-color .15s ease;}
@@ -242,6 +248,10 @@
       <div class="card-top">
         <div class="infinitive" id="infinitive">—</div>
         <div class="gloss" id="gloss" lang="en"></div>
+        <div class="example" id="exampleBlock" hidden>
+          <div class="example-de" id="exampleDe" lang="de"></div>
+          <div class="example-en" id="exampleEn" lang="en"></div>
+        </div>
       </div>
       <div class="rows" id="rows"></div>
       <div class="card-actions">
@@ -667,8 +677,1563 @@
     ["zustimmen","stimmte zu","zugestimmt","hat","to agree"]
   ];
 
+  var EXAMPLES = {
+  "sein": {
+    "de": "Ich bin gestern sehr müde gewesen.",
+    "en": "I was very tired yesterday."
+  },
+  "haben": {
+    "de": "Wir haben letzte Woche keine Zeit gehabt.",
+    "en": "We didn't have time last week."
+  },
+  "werden": {
+    "de": "Sie ist letztes Jahr Ärztin geworden.",
+    "en": "She became a doctor last year."
+  },
+  "gehen": {
+    "de": "Er ist heute Morgen zur Arbeit gegangen.",
+    "en": "He walked to work this morning."
+  },
+  "kommen": {
+    "de": "Meine Freunde sind pünktlich gekommen.",
+    "en": "My friends arrived on time."
+  },
+  "sehen": {
+    "de": "Ich habe gestern einen guten Film gesehen.",
+    "en": "I saw a good movie yesterday."
+  },
+  "geben": {
+    "de": "Er hat mir sein altes Fahrrad gegeben.",
+    "en": "He gave me his old bicycle."
+  },
+  "nehmen": {
+    "de": "Sie hat den Bus zur Schule genommen.",
+    "en": "She took the bus to school."
+  },
+  "finden": {
+    "de": "Wir haben endlich unsere Schlüssel gefunden.",
+    "en": "We finally found our keys."
+  },
+  "sprechen": {
+    "de": "Er hat mit seinem Chef gesprochen.",
+    "en": "He talked to his boss."
+  },
+  "lesen": {
+    "de": "Ich habe das ganze Buch gelesen.",
+    "en": "I read the whole book."
+  },
+  "schreiben": {
+    "de": "Sie hat ihrer Mutter einen Brief geschrieben.",
+    "en": "She wrote her mother a letter."
+  },
+  "fahren": {
+    "de": "Wir sind mit dem Auto nach Berlin gefahren.",
+    "en": "We drove to Berlin."
+  },
+  "fliegen": {
+    "de": "Meine Eltern sind nach Spanien geflogen.",
+    "en": "My parents flew to Spain."
+  },
+  "laufen": {
+    "de": "Er ist jeden Morgen im Park gelaufen.",
+    "en": "He ran in the park every morning."
+  },
+  "essen": {
+    "de": "Wir haben zusammen zu Abend gegessen.",
+    "en": "We had dinner together."
+  },
+  "trinken": {
+    "de": "Sie hat eine Tasse Kaffee getrunken.",
+    "en": "She drank a cup of coffee."
+  },
+  "schlafen": {
+    "de": "Das Baby hat den ganzen Nachmittag geschlafen.",
+    "en": "The baby slept all afternoon."
+  },
+  "tragen": {
+    "de": "Er hat einen schweren Koffer getragen.",
+    "en": "He carried a heavy suitcase."
+  },
+  "treffen": {
+    "de": "Ich habe meine alte Freundin getroffen.",
+    "en": "I met my old friend."
+  },
+  "bleiben": {
+    "de": "Wir sind das ganze Wochenende zu Hause geblieben.",
+    "en": "We stayed home all weekend."
+  },
+  "steigen": {
+    "de": "Er ist auf den hohen Berg gestiegen.",
+    "en": "He climbed the high mountain."
+  },
+  "ziehen": {
+    "de": "Er hat den schweren Wagen aus dem Schnee gezogen.",
+    "en": "He pulled the heavy cart out of the snow."
+  },
+  "fließen": {
+    "de": "Der Fluss ist ruhig durch das Tal geflossen.",
+    "en": "The river flowed calmly through the valley."
+  },
+  "schließen": {
+    "de": "Sie hat das Fenster vor dem Regen geschlossen.",
+    "en": "She closed the window before the rain."
+  },
+  "genießen": {
+    "de": "Wir haben den schönen Sommertag genossen.",
+    "en": "We enjoyed the beautiful summer day."
+  },
+  "verlieren": {
+    "de": "Er hat sein Handy im Zug verloren.",
+    "en": "He lost his phone on the train."
+  },
+  "gewinnen": {
+    "de": "Unsere Mannschaft hat das Spiel gewonnen.",
+    "en": "Our team won the game."
+  },
+  "beginnen": {
+    "de": "Der Unterricht hat um acht Uhr begonnen.",
+    "en": "Class started at eight o'clock."
+  },
+  "schwimmen": {
+    "de": "Die Kinder sind im See geschwommen.",
+    "en": "The children swam in the lake."
+  },
+  "singen": {
+    "de": "Sie hat ein schönes Lied gesungen.",
+    "en": "She sang a beautiful song."
+  },
+  "springen": {
+    "de": "Der Junge ist über den Zaun gesprungen.",
+    "en": "The boy jumped over the fence."
+  },
+  "sitzen": {
+    "de": "Wir haben den ganzen Abend im Garten gesessen.",
+    "en": "We sat in the garden all evening."
+  },
+  "liegen": {
+    "de": "Das Buch hat die ganze Zeit auf dem Tisch gelegen.",
+    "en": "The book was lying on the table the whole time."
+  },
+  "stehen": {
+    "de": "Er hat eine Stunde an der Haltestelle gestanden.",
+    "en": "He stood at the bus stop for an hour."
+  },
+  "fallen": {
+    "de": "Das Glas ist vom Tisch gefallen.",
+    "en": "The glass fell off the table."
+  },
+  "helfen": {
+    "de": "Sie hat ihrem Bruder bei den Hausaufgaben geholfen.",
+    "en": "She helped her brother with his homework."
+  },
+  "sterben": {
+    "de": "Der alte Mann ist letztes Jahr gestorben.",
+    "en": "The old man died last year."
+  },
+  "werfen": {
+    "de": "Der Junge hat den Ball ins Tor geworfen.",
+    "en": "The boy threw the ball into the goal."
+  },
+  "brechen": {
+    "de": "Er hat sich beim Skifahren das Bein gebrochen.",
+    "en": "He broke his leg while skiing."
+  },
+  "treten": {
+    "de": "Sie ist aus dem Haus getreten.",
+    "en": "She stepped out of the house."
+  },
+  "vergessen": {
+    "de": "Ich habe meinen Regenschirm zu Hause vergessen.",
+    "en": "I forgot my umbrella at home."
+  },
+  "waschen": {
+    "de": "Er hat sein Auto am Wochenende gewaschen.",
+    "en": "He washed his car over the weekend."
+  },
+  "wachsen": {
+    "de": "Der Baum ist in den letzten Jahren stark gewachsen.",
+    "en": "The tree has grown a lot in recent years."
+  },
+  "tun": {
+    "de": "Sie hat mir einen großen Gefallen getan.",
+    "en": "She did me a big favor."
+  },
+  "rufen": {
+    "de": "Er hat sofort einen Krankenwagen gerufen.",
+    "en": "He immediately called an ambulance."
+  },
+  "laden": {
+    "de": "Wir haben die Koffer ins Auto geladen.",
+    "en": "We loaded the suitcases into the car."
+  },
+  "schlagen": {
+    "de": "Der Boxer hat seinen Gegner geschlagen.",
+    "en": "The boxer beat his opponent."
+  },
+  "backen": {
+    "de": "Meine Oma hat einen Apfelkuchen gebacken.",
+    "en": "My grandma baked an apple cake."
+  },
+  "fangen": {
+    "de": "Die Katze hat eine Maus gefangen.",
+    "en": "The cat caught a mouse."
+  },
+  "halten": {
+    "de": "Sie hat das Baby vorsichtig gehalten.",
+    "en": "She held the baby carefully."
+  },
+  "lassen": {
+    "de": "Der Chef hat mir bei diesem Projekt freie Hand gelassen.",
+    "en": "My boss let me handle this project my own way."
+  },
+  "raten": {
+    "de": "Er hat mir geraten, mehr Sport zu treiben.",
+    "en": "He advised me to exercise more."
+  },
+  "schneiden": {
+    "de": "Sie hat das Brot in Scheiben geschnitten.",
+    "en": "She cut the bread into slices."
+  },
+  "leiden": {
+    "de": "Du hast lange unter der Kälte gelitten.",
+    "en": "You suffered from the cold for a long time."
+  },
+  "reiten": {
+    "de": "Sie ist heute Morgen durch den Wald geritten.",
+    "en": "She rode through the forest this morning."
+  },
+  "scheinen": {
+    "de": "Die Sonne hat den ganzen Tag geschienen.",
+    "en": "The sun shone all day."
+  },
+  "schweigen": {
+    "de": "Er hat während der ganzen Sitzung geschwiegen.",
+    "en": "He remained silent during the whole meeting."
+  },
+  "beweisen": {
+    "de": "Der Wissenschaftler hat seine Theorie bewiesen.",
+    "en": "The scientist proved his theory."
+  },
+  "entscheiden": {
+    "de": "Wir haben uns für das billigere Hotel entschieden.",
+    "en": "We decided on the cheaper hotel."
+  },
+  "verbieten": {
+    "de": "Die Lehrerin hat das Handy im Unterricht verboten.",
+    "en": "The teacher banned phones in class."
+  },
+  "bieten": {
+    "de": "Das Hotel hat einen tollen Ausblick geboten.",
+    "en": "The hotel offered a great view."
+  },
+  "fliehen": {
+    "de": "Die Familie ist vor dem Krieg geflohen.",
+    "en": "The family fled the war."
+  },
+  "wiegen": {
+    "de": "Der Bäcker hat das Mehl genau gewogen.",
+    "en": "The baker weighed the flour precisely."
+  },
+  "lügen": {
+    "de": "Das Kind hat gelogen, um Ärger zu vermeiden.",
+    "en": "The child lied to avoid trouble."
+  },
+  "betrügen": {
+    "de": "Er hat seine Geschäftspartner betrogen.",
+    "en": "He cheated his business partners."
+  },
+  "verlassen": {
+    "de": "Sie hat die Stadt vor zehn Jahren verlassen.",
+    "en": "She left the city ten years ago."
+  },
+  "empfehlen": {
+    "de": "Der Arzt hat mir dieses Medikament empfohlen.",
+    "en": "The doctor recommended this medicine to me."
+  },
+  "stehlen": {
+    "de": "Jemand hat mein Fahrrad gestohlen.",
+    "en": "Someone stole my bicycle."
+  },
+  "befehlen": {
+    "de": "Der General hat den Rückzug befohlen.",
+    "en": "The general ordered the retreat."
+  },
+  "messen": {
+    "de": "Der Arzt hat meinen Blutdruck gemessen.",
+    "en": "The doctor measured my blood pressure."
+  },
+  "vergleichen": {
+    "de": "Sie hat die Preise in zwei Geschäften verglichen.",
+    "en": "She compared the prices at two stores."
+  },
+  "greifen": {
+    "de": "Er hat schnell nach seinem Schlüssel gegriffen.",
+    "en": "He quickly grabbed his key."
+  },
+  "bringen": {
+    "de": "Sie hat mir eine Tasse Tee gebracht.",
+    "en": "She brought me a cup of tea."
+  },
+  "denken": {
+    "de": "Ich habe die ganze Nacht an dich gedacht.",
+    "en": "I thought about you all night."
+  },
+  "kennen": {
+    "de": "Ich habe ihn schon lange gekannt.",
+    "en": "I knew him for a long time."
+  },
+  "nennen": {
+    "de": "Sie hat ihren Sohn Max genannt.",
+    "en": "She named her son Max."
+  },
+  "rennen": {
+    "de": "Er ist schnell zur Bushaltestelle gerannt.",
+    "en": "He ran quickly to the bus stop."
+  },
+  "brennen": {
+    "de": "Das Feuer hat die ganze Nacht gebrannt.",
+    "en": "The fire burned all night."
+  },
+  "wissen": {
+    "de": "Ich habe die Antwort nicht gewusst.",
+    "en": "I didn't know the answer."
+  },
+  "gefallen": {
+    "de": "Der Film hat mir sehr gut gefallen.",
+    "en": "I really liked the movie."
+  },
+  "wenden": {
+    "de": "Er hat sich mit einer Frage an die Lehrerin gewandt.",
+    "en": "He turned to the teacher with a question."
+  },
+  "senden": {
+    "de": "Sie hat ihm ein wichtiges Dokument gesandt.",
+    "en": "She sent him an important document."
+  },
+  "erschrecken": {
+    "de": "Ich bin über den lauten Donner erschrocken.",
+    "en": "I was startled by the loud thunder."
+  },
+  "verschwinden": {
+    "de": "Die Katze ist plötzlich im Garten verschwunden.",
+    "en": "The cat suddenly disappeared in the garden."
+  },
+  "gelingen": {
+    "de": "Es ist ihm gelungen, die Prüfung zu bestehen.",
+    "en": "He managed to pass the exam."
+  },
+  "misslingen": {
+    "de": "Der Kuchen ist ihr leider misslungen.",
+    "en": "Unfortunately, her cake didn't turn out well."
+  },
+  "klingen": {
+    "de": "Deine Idee hat wirklich gut geklungen.",
+    "en": "Your idea sounded really good."
+  },
+  "gelten": {
+    "de": "Diese Regel hat für alle Schüler gegolten.",
+    "en": "This rule applied to all students."
+  },
+  "verstehen": {
+    "de": "Du hast die Erklärung offensichtlich nicht verstanden.",
+    "en": "You clearly didn't understand the explanation."
+  },
+  "bestehen": {
+    "de": "Sie hat die Prüfung mit Erfolg bestanden.",
+    "en": "She passed the exam successfully."
+  },
+  "entstehen": {
+    "de": "Durch den Unfall ist ein großer Stau entstanden.",
+    "en": "The accident caused a big traffic jam."
+  },
+  "gefrieren": {
+    "de": "Das Wasser ist über Nacht zu Eis gefroren.",
+    "en": "The water froze into ice overnight."
+  },
+  "frieren": {
+    "de": "Ich habe im Winter oft gefroren.",
+    "en": "I often felt cold in winter."
+  },
+  "schmelzen": {
+    "de": "Der Schnee ist in der Sonne schnell geschmolzen.",
+    "en": "The snow melted quickly in the sun."
+  },
+  "riechen": {
+    "de": "Das Essen hat wirklich lecker gerochen.",
+    "en": "The food smelled really delicious."
+  },
+  "kriechen": {
+    "de": "Das Baby ist zum ersten Mal gekrochen.",
+    "en": "The baby crawled for the first time."
+  },
+  "biegen": {
+    "de": "Er hat den Draht mit der Zange gebogen.",
+    "en": "He bent the wire with pliers."
+  },
+  "besitzen": {
+    "de": "Meine Oma hat ein altes Auto besessen.",
+    "en": "My grandma owned an old car."
+  },
+  "schieben": {
+    "de": "Wir haben den Wagen zur Werkstatt geschoben.",
+    "en": "We pushed the car to the garage."
+  },
+  "fressen": {
+    "de": "Die Katze hat das ganze Futter gefressen.",
+    "en": "The cat ate all the food."
+  },
+  "betreten": {
+    "de": "Er hat den Raum leise betreten.",
+    "en": "He entered the room quietly."
+  },
+  "verbergen": {
+    "de": "Sie hat ihre Angst gut verborgen.",
+    "en": "She hid her fear well."
+  },
+  "bergen": {
+    "de": "Die Feuerwehr hat die Verletzten geborgen.",
+    "en": "The fire department rescued the injured."
+  },
+  "werben": {
+    "de": "Die Firma hat für ihr neues Produkt geworben.",
+    "en": "The company advertised its new product."
+  },
+  "verderben": {
+    "de": "Die Milch ist im Sommer schnell verdorben.",
+    "en": "The milk went bad quickly in summer."
+  },
+  "schwellen": {
+    "de": "Sein Knöchel ist nach dem Sturz geschwollen.",
+    "en": "His ankle swelled up after the fall."
+  },
+  "pfeifen": {
+    "de": "Er hat fröhlich vor sich hin gepfiffen.",
+    "en": "He whistled cheerfully to himself."
+  },
+  "kneifen": {
+    "de": "Das Kind hat seinen Bruder in den Arm gekniffen.",
+    "en": "The child pinched his brother's arm."
+  },
+  "beißen": {
+    "de": "Der Hund hat den Briefträger gebissen.",
+    "en": "The dog bit the mailman."
+  },
+  "reißen": {
+    "de": "Sie hat das Papier in zwei Teile gerissen.",
+    "en": "She tore the paper into two pieces."
+  },
+  "gleiten": {
+    "de": "Das Boot ist leise über den See geglitten.",
+    "en": "The boat glided quietly across the lake."
+  },
+  "schleichen": {
+    "de": "Die Katze ist leise durch den Flur geschlichen.",
+    "en": "The cat crept quietly through the hallway."
+  },
+  "weichen": {
+    "de": "Die Angst ist langsam der Erleichterung gewichen.",
+    "en": "The fear slowly gave way to relief."
+  },
+  "verzeihen": {
+    "de": "Sie hat ihm seinen Fehler verziehen.",
+    "en": "She forgave him his mistake."
+  },
+  "leihen": {
+    "de": "Er hat mir sein Fahrrad geliehen.",
+    "en": "He lent me his bike."
+  },
+  "gedeihen": {
+    "de": "Die Pflanze ist im neuen Topf gut gediehen.",
+    "en": "The plant thrived well in the new pot."
+  },
+  "preisen": {
+    "de": "Die Kritiker haben den neuen Film gepriesen.",
+    "en": "The critics praised the new film."
+  },
+  "gießen": {
+    "de": "Sie hat heute Morgen die Blumen gegossen.",
+    "en": "She watered the flowers this morning."
+  },
+  "schießen": {
+    "de": "Der Spieler hat ein Tor geschossen.",
+    "en": "The player scored a goal."
+  },
+  "binden": {
+    "de": "Er hat sich die Schuhe gebunden.",
+    "en": "He tied his shoes."
+  },
+  "verbinden": {
+    "de": "Die neue Brücke hat die beiden Städte verbunden.",
+    "en": "The new bridge connected the two cities."
+  },
+  "empfinden": {
+    "de": "Sie hat bei der Nachricht große Freude empfunden.",
+    "en": "She felt great joy at the news."
+  },
+  "sinken": {
+    "de": "Das alte Schiff ist langsam im Meer gesunken.",
+    "en": "The old ship slowly sank in the sea."
+  },
+  "zwingen": {
+    "de": "Der Regen hat uns zur Pause gezwungen.",
+    "en": "The rain forced us to take a break."
+  },
+  "schwingen": {
+    "de": "Er hat den Hammer kräftig geschwungen.",
+    "en": "He swung the hammer forcefully."
+  },
+  "ringen": {
+    "de": "Die beiden Männer haben lange miteinander gerungen.",
+    "en": "The two men wrestled with each other for a long time."
+  },
+  "dringen": {
+    "de": "Das Wasser ist durch die Wand gedrungen.",
+    "en": "The water penetrated through the wall."
+  },
+  "heben": {
+    "de": "Er hat die schwere Kiste gehoben.",
+    "en": "He lifted the heavy box."
+  },
+  "unterscheiden": {
+    "de": "Der Experte hat die Fälschung vom Original unterschieden.",
+    "en": "The expert distinguished the fake from the original."
+  },
+  "bekommen": {
+    "de": "Ich habe ein Geschenk zum Geburtstag bekommen.",
+    "en": "I got a present for my birthday."
+  },
+  "enthalten": {
+    "de": "Die Suppe hat viel Salz enthalten.",
+    "en": "The soup contained a lot of salt."
+  },
+  "erhalten": {
+    "de": "Sie hat einen Brief von ihrer Freundin erhalten.",
+    "en": "She received a letter from her friend."
+  },
+  "unterhalten": {
+    "de": "Der Clown hat die Kinder gut unterhalten.",
+    "en": "The clown entertained the children well."
+  },
+  "anfangen": {
+    "de": "Der Film hat heute Abend pünktlich angefangen.",
+    "en": "The movie started on time tonight."
+  },
+  "aufstehen": {
+    "de": "Ich bin heute sehr früh aufgestanden.",
+    "en": "I got up very early today."
+  },
+  "verschieben": {
+    "de": "Wir haben das Treffen auf nächste Woche verschoben.",
+    "en": "We postponed the meeting to next week."
+  },
+  "einladen": {
+    "de": "Sie hat mich zu ihrer Party eingeladen.",
+    "en": "She invited me to her party."
+  },
+  "anziehen": {
+    "de": "Das Kind hat sich schnell angezogen.",
+    "en": "The child got dressed quickly."
+  },
+  "ausziehen": {
+    "de": "Er ist letzten Monat aus der Wohnung ausgezogen.",
+    "en": "He moved out of the apartment last month."
+  },
+  "umziehen": {
+    "de": "Wir sind letztes Jahr nach Berlin umgezogen.",
+    "en": "We moved to Berlin last year."
+  },
+  "vorziehen": {
+    "de": "Ich habe Tee dem Kaffee vorgezogen.",
+    "en": "I preferred tea to coffee."
+  },
+  "übernehmen": {
+    "de": "Sie hat die Firma von ihrem Vater übernommen.",
+    "en": "She took over the company from her father."
+  },
+  "unternehmen": {
+    "de": "Wir haben am Wochenende etwas Schönes unternommen.",
+    "en": "We did something nice over the weekend."
+  },
+  "teilnehmen": {
+    "de": "Er hat an dem Wettbewerb teilgenommen.",
+    "en": "He took part in the competition."
+  },
+  "abnehmen": {
+    "de": "Sie hat in drei Monaten fünf Kilo abgenommen.",
+    "en": "She lost five kilos in three months."
+  },
+  "zunehmen": {
+    "de": "Er hat im Urlaub etwas zugenommen.",
+    "en": "He gained a bit of weight on vacation."
+  },
+  "vorschlagen": {
+    "de": "Sie hat ein neues Restaurant vorgeschlagen.",
+    "en": "She suggested a new restaurant."
+  },
+  "auffallen": {
+    "de": "Ihr rotes Kleid ist sofort aufgefallen.",
+    "en": "Her red dress stood out immediately."
+  },
+  "einfallen": {
+    "de": "Mir ist plötzlich eine gute Idee eingefallen.",
+    "en": "A good idea suddenly occurred to me."
+  },
+  "überfallen": {
+    "de": "Die Räuber haben die Bank überfallen.",
+    "en": "The robbers raided the bank."
+  },
+  "behalten": {
+    "de": "Er hat das teure Geschenk behalten.",
+    "en": "He kept the expensive gift."
+  },
+  "anhalten": {
+    "de": "Der Bus hat mitten auf der Straße angehalten.",
+    "en": "The bus stopped in the middle of the street."
+  },
+  "festhalten": {
+    "de": "Das Kind hat die Hand seiner Mutter festgehalten.",
+    "en": "The child held onto its mother's hand."
+  },
+  "entlassen": {
+    "de": "Die Firma hat zehn Mitarbeiter entlassen.",
+    "en": "The company dismissed ten employees."
+  },
+  "zulassen": {
+    "de": "Der Lehrer hat keine Ausreden zugelassen.",
+    "en": "The teacher didn't allow any excuses."
+  },
+  "loslassen": {
+    "de": "Sie hat seine Hand endlich losgelassen.",
+    "en": "She finally let go of his hand."
+  },
+  "hinterlassen": {
+    "de": "Er hat mir eine Nachricht hinterlassen.",
+    "en": "He left me a message."
+  },
+  "übersehen": {
+    "de": "Ich habe den Fehler leider übersehen.",
+    "en": "I unfortunately overlooked the mistake."
+  },
+  "fernsehen": {
+    "de": "Die Kinder haben den ganzen Abend ferngesehen.",
+    "en": "The children watched TV all evening."
+  },
+  "aussehen": {
+    "de": "Sie hat heute sehr müde ausgesehen.",
+    "en": "She looked very tired today."
+  },
+  "vorlesen": {
+    "de": "Die Mutter hat ihrem Sohn eine Geschichte vorgelesen.",
+    "en": "The mother read her son a story aloud."
+  },
+  "beschreiben": {
+    "de": "Der Zeuge hat den Täter genau beschrieben.",
+    "en": "The witness described the perpetrator precisely."
+  },
+  "unterschreiben": {
+    "de": "Er hat den neuen Vertrag unterschrieben.",
+    "en": "He signed the new contract."
+  },
+  "verschreiben": {
+    "de": "Der Arzt hat ihr ein neues Medikament verschrieben.",
+    "en": "The doctor prescribed her a new medication."
+  },
+  "anbieten": {
+    "de": "Der Kellner hat uns einen Tisch am Fenster angeboten.",
+    "en": "The waiter offered us a table by the window."
+  },
+  "anrufen": {
+    "de": "Sie hat mich gestern Abend angerufen.",
+    "en": "She called me last night."
+  },
+  "aufrufen": {
+    "de": "Die Organisation hat die Bürger zum Handeln aufgerufen.",
+    "en": "The organization called on citizens to take action."
+  },
+  "hervorrufen": {
+    "de": "Der Skandal hat große Empörung hervorgerufen.",
+    "en": "The scandal caused great outrage."
+  },
+  "beraten": {
+    "de": "Der Anwalt hat seinen Klienten gut beraten.",
+    "en": "The lawyer advised his client well."
+  },
+  "übertreiben": {
+    "de": "Er hat mit seiner Geschichte stark übertrieben.",
+    "en": "He exaggerated a lot with his story."
+  },
+  "vertreiben": {
+    "de": "Die Polizei hat die Demonstranten vertrieben.",
+    "en": "The police drove away the demonstrators."
+  },
+  "betreiben": {
+    "de": "Meine Familie hat lange ein kleines Restaurant betrieben.",
+    "en": "My family ran a small restaurant for a long time."
+  },
+  "abschließen": {
+    "de": "Sie hat ihr Studium letztes Jahr abgeschlossen.",
+    "en": "She completed her studies last year."
+  },
+  "ausschließen": {
+    "de": "Der Verein hat ihn wegen seines Verhaltens ausgeschlossen.",
+    "en": "The club excluded him because of his behavior."
+  },
+  "einschließen": {
+    "de": "Der Preis hat das Frühstück eingeschlossen.",
+    "en": "The price included breakfast."
+  },
+  "beschließen": {
+    "de": "Die Regierung hat neue Gesetze beschlossen.",
+    "en": "The government decided on new laws."
+  },
+  "verschlafen": {
+    "de": "Ich habe heute Morgen leider verschlafen.",
+    "en": "I unfortunately overslept this morning."
+  },
+  "einschlafen": {
+    "de": "Das müde Baby ist schnell eingeschlafen.",
+    "en": "The tired baby fell asleep quickly."
+  },
+  "mitnehmen": {
+    "de": "Sie hat heute ihren Regenschirm mitgenommen.",
+    "en": "She took her umbrella along today."
+  },
+  "wegnehmen": {
+    "de": "Der Lehrer hat ihm das Handy weggenommen.",
+    "en": "The teacher took his phone away."
+  },
+  "annehmen": {
+    "de": "Ich habe angenommen, dass du zu Hause bist.",
+    "en": "I assumed that you were at home."
+  },
+  "treiben": {
+    "de": "Der Wind hat die Blätter durch die Straße getrieben.",
+    "en": "The wind drove the leaves through the street."
+  },
+  "weisen": {
+    "de": "Er hat mir den richtigen Weg gewiesen.",
+    "en": "He showed me the right way."
+  },
+  "gleichen": {
+    "de": "Sie hat ihrer Mutter sehr geglichen.",
+    "en": "She resembled her mother a lot."
+  },
+  "schleifen": {
+    "de": "Er hat das Messer scharf geschliffen.",
+    "en": "He sharpened the knife well."
+  },
+  "schwören": {
+    "de": "Der Zeuge hat einen Eid geschworen.",
+    "en": "The witness swore an oath."
+  },
+  "erwägen": {
+    "de": "Sie hat einen Umzug nach München erwogen.",
+    "en": "She considered moving to Munich."
+  },
+  "rinnen": {
+    "de": "Ein Tropfen ist langsam über die Fensterscheibe geronnen.",
+    "en": "A drop trickled slowly down the windowpane."
+  },
+  "mahlen": {
+    "de": "Sie hat die frischen Kaffeebohnen fein gemahlen.",
+    "en": "She ground the fresh coffee beans finely."
+  },
+  "stattfinden": {
+    "de": "Die Konferenz hat letzte Woche stattgefunden.",
+    "en": "The conference took place last week."
+  },
+  "stinken": {
+    "de": "Der alte Müll hat fürchterlich gestunken.",
+    "en": "The old garbage stank terribly."
+  },
+  "meiden": {
+    "de": "Sie hat ihren alten Kollegen gemieden.",
+    "en": "She avoided her old colleague."
+  },
+  "vermeiden": {
+    "de": "Wir haben den Stau erfolgreich vermieden.",
+    "en": "We successfully avoided the traffic jam."
+  },
+  "machen": {
+    "de": "Ich habe die Hausaufgaben gemacht.",
+    "en": "I did my homework."
+  },
+  "sagen": {
+    "de": "Du hast die Wahrheit gesagt.",
+    "en": "You told the truth."
+  },
+  "spielen": {
+    "de": "Er hat mit seinem Bruder gespielt.",
+    "en": "He played with his brother."
+  },
+  "lernen": {
+    "de": "Sie hat zwei Jahre lang Deutsch gelernt.",
+    "en": "She learned German for two years."
+  },
+  "lieben": {
+    "de": "Maria hat ihren Mann sehr geliebt.",
+    "en": "Maria loved her husband very much."
+  },
+  "wohnen": {
+    "de": "Wir haben zehn Jahre in Berlin gewohnt.",
+    "en": "We lived in Berlin for ten years."
+  },
+  "kaufen": {
+    "de": "Sie haben ein neues Auto gekauft.",
+    "en": "They bought a new car."
+  },
+  "suchen": {
+    "de": "Er hat seinen Schlüssel gesucht.",
+    "en": "He looked for his key."
+  },
+  "brauchen": {
+    "de": "Du hast mehr Zeit gebraucht.",
+    "en": "You needed more time."
+  },
+  "fragen": {
+    "de": "Der Schüler hat den Lehrer gefragt.",
+    "en": "The student asked the teacher."
+  },
+  "antworten": {
+    "de": "Sie hat sofort auf die Frage geantwortet.",
+    "en": "She answered the question right away."
+  },
+  "arbeiten": {
+    "de": "Er hat den ganzen Tag gearbeitet.",
+    "en": "He worked all day."
+  },
+  "warten": {
+    "de": "Wir haben eine Stunde gewartet.",
+    "en": "We waited for an hour."
+  },
+  "öffnen": {
+    "de": "Du hast das Fenster geöffnet.",
+    "en": "You opened the window."
+  },
+  "kochen": {
+    "de": "Meine Mutter hat Suppe gekocht.",
+    "en": "My mother cooked soup."
+  },
+  "putzen": {
+    "de": "Ich habe mein Zimmer geputzt.",
+    "en": "I cleaned my room."
+  },
+  "tanzen": {
+    "de": "Wir haben die ganze Nacht getanzt.",
+    "en": "We danced all night."
+  },
+  "hören": {
+    "de": "Sie hat den ganzen Abend Musik gehört.",
+    "en": "She listened to music all evening."
+  },
+  "holen": {
+    "de": "Er hat Brot vom Bäcker geholt.",
+    "en": "He got bread from the bakery."
+  },
+  "zeigen": {
+    "de": "Du hast mir deine Fotos gezeigt.",
+    "en": "You showed me your photos."
+  },
+  "legen": {
+    "de": "Er hat das Buch auf den Tisch gelegt.",
+    "en": "He put the book on the table."
+  },
+  "stellen": {
+    "de": "Sie hat die Vase auf den Tisch gestellt.",
+    "en": "She put the vase on the table."
+  },
+  "setzen": {
+    "de": "Die Mutter hat das Kind auf den Stuhl gesetzt.",
+    "en": "The mother put the child on the chair."
+  },
+  "packen": {
+    "de": "Ich habe meinen Koffer gepackt.",
+    "en": "I packed my suitcase."
+  },
+  "sammeln": {
+    "de": "Die Kinder haben Muscheln gesammelt.",
+    "en": "The children collected shells."
+  },
+  "wechseln": {
+    "de": "Er hat das Geld gewechselt.",
+    "en": "He exchanged the money."
+  },
+  "lächeln": {
+    "de": "Sie hat die ganze Zeit freundlich gelächelt.",
+    "en": "She smiled kindly the whole time."
+  },
+  "glauben": {
+    "de": "Ich habe ihm seine Geschichte nicht geglaubt.",
+    "en": "I didn't believe his story."
+  },
+  "hoffen": {
+    "de": "Wir haben auf gutes Wetter gehofft.",
+    "en": "We hoped for good weather."
+  },
+  "leben": {
+    "de": "Sie hat ein glückliches Leben gelebt.",
+    "en": "She lived a happy life."
+  },
+  "dauern": {
+    "de": "Der Film hat zwei Stunden gedauert.",
+    "en": "The movie lasted two hours."
+  },
+  "feiern": {
+    "de": "Wir haben ihren Geburtstag gefeiert.",
+    "en": "We celebrated her birthday."
+  },
+  "besuchen": {
+    "de": "Ich habe meine Oma besucht.",
+    "en": "I visited my grandma."
+  },
+  "bezahlen": {
+    "de": "Er hat die Rechnung bezahlt.",
+    "en": "He paid the bill."
+  },
+  "bestellen": {
+    "de": "Sie hat eine Pizza bestellt.",
+    "en": "She ordered a pizza."
+  },
+  "verkaufen": {
+    "de": "Er hat sein altes Fahrrad verkauft.",
+    "en": "He sold his old bike."
+  },
+  "versuchen": {
+    "de": "Ich habe es dreimal versucht.",
+    "en": "I tried it three times."
+  },
+  "verdienen": {
+    "de": "Sie hat viel Geld verdient.",
+    "en": "She earned a lot of money."
+  },
+  "erzählen": {
+    "de": "Er hat uns eine Geschichte erzählt.",
+    "en": "He told us a story."
+  },
+  "erklären": {
+    "de": "Die Lehrerin hat die Regel erklärt.",
+    "en": "The teacher explained the rule."
+  },
+  "entdecken": {
+    "de": "Die Kinder haben ein Geheimnis entdeckt.",
+    "en": "The children discovered a secret."
+  },
+  "gehören": {
+    "de": "Das Haus hat meinem Opa gehört.",
+    "en": "The house belonged to my grandpa."
+  },
+  "beobachten": {
+    "de": "Er hat die Vögel beobachtet.",
+    "en": "He observed the birds."
+  },
+  "studieren": {
+    "de": "Sie hat vier Jahre lang Medizin studiert.",
+    "en": "She studied medicine for four years."
+  },
+  "probieren": {
+    "de": "Ich habe den Kuchen probiert.",
+    "en": "I tried the cake."
+  },
+  "telefonieren": {
+    "de": "Er hat mit seiner Mutter telefoniert.",
+    "en": "He talked to his mother on the phone."
+  },
+  "diskutieren": {
+    "de": "Wir haben über Politik diskutiert.",
+    "en": "We discussed politics."
+  },
+  "organisieren": {
+    "de": "Sie hat die Party organisiert.",
+    "en": "She organized the party."
+  },
+  "reparieren": {
+    "de": "Er hat das Auto repariert.",
+    "en": "He repaired the car."
+  },
+  "reservieren": {
+    "de": "Wir haben einen Tisch reserviert.",
+    "en": "We reserved a table."
+  },
+  "informieren": {
+    "de": "Sie hat uns über die Änderung informiert.",
+    "en": "She informed us about the change."
+  },
+  "interessieren": {
+    "de": "Das Thema hat mich sehr interessiert.",
+    "en": "The topic interested me a lot."
+  },
+  "fotografieren": {
+    "de": "Er hat den Sonnenuntergang fotografiert.",
+    "en": "He photographed the sunset."
+  },
+  "buchstabieren": {
+    "de": "Sie hat ihren Namen buchstabiert.",
+    "en": "She spelled her name."
+  },
+  "funktionieren": {
+    "de": "Der Drucker hat nicht funktioniert.",
+    "en": "The printer didn't work."
+  },
+  "passieren": {
+    "de": "Bei der Kreuzung ist ein Unfall passiert.",
+    "en": "An accident happened at the intersection."
+  },
+  "reisen": {
+    "de": "Sie ist nach Italien gereist.",
+    "en": "She traveled to Italy."
+  },
+  "wandern": {
+    "de": "Wir sind in den Bergen gewandert.",
+    "en": "We hiked in the mountains."
+  },
+  "reagieren": {
+    "de": "Er hat auf die Frage schnell reagiert.",
+    "en": "He reacted quickly to the question."
+  },
+  "gratulieren": {
+    "de": "Ich habe ihr zum Geburtstag gratuliert.",
+    "en": "I congratulated her on her birthday."
+  },
+  "duschen": {
+    "de": "Ich habe heute Morgen geduscht.",
+    "en": "I showered this morning."
+  },
+  "rasieren": {
+    "de": "Er hat sich vor der Arbeit rasiert.",
+    "en": "He shaved before work."
+  },
+  "parken": {
+    "de": "Sie hat das Auto vor dem Haus geparkt.",
+    "en": "She parked the car in front of the house."
+  },
+  "tanken": {
+    "de": "Er hat an der Tankstelle getankt.",
+    "en": "He filled up at the gas station."
+  },
+  "mieten": {
+    "de": "Wir haben eine Wohnung gemietet.",
+    "en": "We rented an apartment."
+  },
+  "heiraten": {
+    "de": "Sie hat ihren Jugendfreund geheiratet.",
+    "en": "She married her childhood friend."
+  },
+  "atmen": {
+    "de": "Nach dem Lauf hat er tief geatmet.",
+    "en": "After the run, he breathed deeply."
+  },
+  "rechnen": {
+    "de": "Sie hat schnell im Kopf gerechnet.",
+    "en": "She calculated quickly in her head."
+  },
+  "zeichnen": {
+    "de": "Das Kind hat ein Pferd gezeichnet.",
+    "en": "The child drew a horse."
+  },
+  "regnen": {
+    "de": "Es hat gestern den ganzen Tag geregnet.",
+    "en": "It rained all day yesterday."
+  },
+  "schneien": {
+    "de": "In den Bergen hat es letzte Nacht geschneit.",
+    "en": "It snowed in the mountains last night."
+  },
+  "lachen": {
+    "de": "Alle haben über den Witz gelacht.",
+    "en": "Everyone laughed at the joke."
+  },
+  "weinen": {
+    "de": "Das Baby hat die ganze Nacht geweint.",
+    "en": "The baby cried all night."
+  },
+  "kämpfen": {
+    "de": "Die Soldaten haben tapfer gekämpft.",
+    "en": "The soldiers fought bravely."
+  },
+  "üben": {
+    "de": "Sie hat jeden Tag Klavier geübt.",
+    "en": "She practiced the piano every day."
+  },
+  "danken": {
+    "de": "Er hat ihr für die Hilfe gedankt.",
+    "en": "He thanked her for the help."
+  },
+  "schenken": {
+    "de": "Ich habe ihm ein Buch geschenkt.",
+    "en": "I gave him a book as a gift."
+  },
+  "mischen": {
+    "de": "Sie hat die Farben gemischt.",
+    "en": "She mixed the colors."
+  },
+  "wiederholen": {
+    "de": "Der Lehrer hat die Frage wiederholt.",
+    "en": "The teacher repeated the question."
+  },
+  "übersetzen": {
+    "de": "Sie hat den Text ins Englische übersetzt.",
+    "en": "She translated the text into English."
+  },
+  "wünschen": {
+    "de": "Er hat sich ein neues Fahrrad gewünscht.",
+    "en": "He wished for a new bike."
+  },
+  "benutzen": {
+    "de": "Ich habe sein Handy benutzt.",
+    "en": "I used his phone."
+  },
+  "verbrauchen": {
+    "de": "Das Auto hat viel Benzin verbraucht.",
+    "en": "The car used up a lot of gas."
+  },
+  "verbessern": {
+    "de": "Sie hat ihre Note verbessert.",
+    "en": "She improved her grade."
+  },
+  "ändern": {
+    "de": "Er hat seine Meinung geändert.",
+    "en": "He changed his mind."
+  },
+  "verändern": {
+    "de": "Die Reise hat ihr Leben verändert.",
+    "en": "The trip changed her life."
+  },
+  "entwickeln": {
+    "de": "Die Firma hat ein neues Produkt entwickelt.",
+    "en": "The company developed a new product."
+  },
+  "entspannen": {
+    "de": "Ich habe mich am Wochenende entspannt.",
+    "en": "I relaxed over the weekend."
+  },
+  "ausmachen": {
+    "de": "Er hat das Licht ausgemacht.",
+    "en": "He turned off the light."
+  },
+  "einschalten": {
+    "de": "Sie hat den Fernseher eingeschaltet.",
+    "en": "She switched on the TV."
+  },
+  "ausschalten": {
+    "de": "Er hat den Computer ausgeschaltet.",
+    "en": "He switched off the computer."
+  },
+  "bedeuten": {
+    "de": "Der Sieg hat dem Team viel bedeutet.",
+    "en": "The win meant a lot to the team."
+  },
+  "beeindrucken": {
+    "de": "Der Film hat mich sehr beeindruckt.",
+    "en": "The movie really impressed me."
+  },
+  "bewundern": {
+    "de": "Sie hat seine Geduld bewundert.",
+    "en": "She admired his patience."
+  },
+  "bemerken": {
+    "de": "Ich habe den Fehler sofort bemerkt.",
+    "en": "I noticed the mistake right away."
+  },
+  "betrachten": {
+    "de": "Er hat das Bild lange betrachtet.",
+    "en": "He looked at the picture for a long time."
+  },
+  "beschäftigen": {
+    "de": "Die Firma hat 50 Mitarbeiter beschäftigt.",
+    "en": "The company employed 50 workers."
+  },
+  "beeinflussen": {
+    "de": "Die Musik hat seine Stimmung stark beeinflusst.",
+    "en": "The music strongly influenced his mood."
+  },
+  "beleidigen": {
+    "de": "Er hat seinen Kollegen mit dem Witz beleidigt.",
+    "en": "He insulted his colleague with the joke."
+  },
+  "buchen": {
+    "de": "Wir haben ein Zimmer im Hotel gebucht.",
+    "en": "We booked a room at the hotel."
+  },
+  "bauen": {
+    "de": "Meine Eltern haben ein neues Haus gebaut.",
+    "en": "My parents built a new house."
+  },
+  "dienen": {
+    "de": "Er hat zehn Jahre in der Armee gedient.",
+    "en": "He served in the army for ten years."
+  },
+  "drucken": {
+    "de": "Sie hat das Dokument sofort gedruckt.",
+    "en": "She printed the document right away."
+  },
+  "drücken": {
+    "de": "Er hat kurz auf den Knopf gedrückt.",
+    "en": "He briefly pressed the button."
+  },
+  "eilen": {
+    "de": "Sie ist schnell zum Bahnhof geeilt.",
+    "en": "She hurried quickly to the train station."
+  },
+  "erinnern": {
+    "de": "Er hat sich an ihren Geburtstag erinnert.",
+    "en": "He remembered her birthday."
+  },
+  "erledigen": {
+    "de": "Ich habe die Hausaufgaben schon erledigt.",
+    "en": "I already finished my homework."
+  },
+  "ermöglichen": {
+    "de": "Das Stipendium hat ihr das Studium ermöglicht.",
+    "en": "The scholarship made it possible for her to study."
+  },
+  "erreichen": {
+    "de": "Wir haben den Gipfel vor Mittag erreicht.",
+    "en": "We reached the summit before noon."
+  },
+  "ersetzen": {
+    "de": "Er hat die alte Lampe ersetzt.",
+    "en": "He replaced the old lamp."
+  },
+  "existieren": {
+    "de": "Diese Stadt hat schon im Mittelalter existiert.",
+    "en": "This city already existed in the Middle Ages."
+  },
+  "folgen": {
+    "de": "Der Hund ist seinem Besitzer gefolgt.",
+    "en": "The dog followed its owner."
+  },
+  "fühlen": {
+    "de": "Ich habe mich nach dem Lauf müde gefühlt.",
+    "en": "I felt tired after the run."
+  },
+  "füllen": {
+    "de": "Sie hat das Glas mit Wasser gefüllt.",
+    "en": "She filled the glass with water."
+  },
+  "grüßen": {
+    "de": "Er hat seine Nachbarin freundlich gegrüßt.",
+    "en": "He greeted his neighbor in a friendly way."
+  },
+  "handeln": {
+    "de": "Der Feuerwehrmann hat sehr schnell gehandelt.",
+    "en": "The firefighter acted very quickly."
+  },
+  "heilen": {
+    "de": "Die Wunde ist nach zwei Wochen geheilt.",
+    "en": "The wound healed after two weeks."
+  },
+  "interviewen": {
+    "de": "Die Journalistin hat den Minister interviewt.",
+    "en": "The journalist interviewed the minister."
+  },
+  "kleben": {
+    "de": "Er hat das Foto ins Album geklebt.",
+    "en": "He stuck the photo into the album."
+  },
+  "kritisieren": {
+    "de": "Sie hat den Plan offen kritisiert.",
+    "en": "She openly criticized the plan."
+  },
+  "kümmern": {
+    "de": "Sie hat sich um die kranke Katze gekümmert.",
+    "en": "She took care of the sick cat."
+  },
+  "klettern": {
+    "de": "Die Kinder sind auf den Baum geklettert.",
+    "en": "The children climbed the tree."
+  },
+  "klingeln": {
+    "de": "Der Briefträger hat an der Tür geklingelt.",
+    "en": "The mailman rang the doorbell."
+  },
+  "landen": {
+    "de": "Das Flugzeug ist pünktlich gelandet.",
+    "en": "The plane landed on time."
+  },
+  "leiten": {
+    "de": "Frau Schmidt hat das Projekt geleitet.",
+    "en": "Ms. Schmidt led the project."
+  },
+  "leuchten": {
+    "de": "Der Mond hat die ganze Nacht geleuchtet.",
+    "en": "The moon shone all night."
+  },
+  "liefern": {
+    "de": "Der Fahrer hat das Paket am Morgen geliefert.",
+    "en": "The driver delivered the package in the morning."
+  },
+  "loben": {
+    "de": "Der Lehrer hat die Schülerin für ihre Arbeit gelobt.",
+    "en": "The teacher praised the student for her work."
+  },
+  "lösen": {
+    "de": "Sie hat das schwierige Rätsel gelöst.",
+    "en": "She solved the difficult puzzle."
+  },
+  "malen": {
+    "de": "Das Kind hat ein buntes Bild gemalt.",
+    "en": "The child painted a colorful picture."
+  },
+  "meinen": {
+    "de": "Sie hat es nicht böse gemeint.",
+    "en": "She didn't mean it in a bad way."
+  },
+  "melden": {
+    "de": "Der Zeuge hat den Unfall der Polizei gemeldet.",
+    "en": "The witness reported the accident to the police."
+  },
+  "merken": {
+    "de": "Er hat den Fehler sofort gemerkt.",
+    "en": "He noticed the mistake right away."
+  },
+  "nutzen": {
+    "de": "Wir haben die Gelegenheit sofort genutzt.",
+    "en": "We used the opportunity right away."
+  },
+  "passen": {
+    "de": "Die Jacke hat ihm perfekt gepasst.",
+    "en": "The jacket fit him perfectly."
+  },
+  "pflegen": {
+    "de": "Sie hat ihren kranken Vater gepflegt.",
+    "en": "She took care of her sick father."
+  },
+  "prüfen": {
+    "de": "Du hast die Bremsen am Fahrrad geprüft.",
+    "en": "You checked the brakes on the bike."
+  },
+  "rauchen": {
+    "de": "Er hat früher viel geraucht.",
+    "en": "He used to smoke a lot."
+  },
+  "reden": {
+    "de": "Wir haben lange über das Problem geredet.",
+    "en": "We talked about the problem for a long time."
+  },
+  "regieren": {
+    "de": "Der König hat das Land vierzig Jahre regiert.",
+    "en": "The king governed the country for forty years."
+  },
+  "reinigen": {
+    "de": "Sie hat die Fenster gründlich gereinigt.",
+    "en": "She cleaned the windows thoroughly."
+  },
+  "retten": {
+    "de": "Der Feuerwehrmann hat das Kind gerettet.",
+    "en": "The firefighter rescued the child."
+  },
+  "schaffen": {
+    "de": "Sie hat die Prüfung erfolgreich geschafft.",
+    "en": "She passed the exam successfully."
+  },
+  "schätzen": {
+    "de": "Er hat die Kosten für die Reise geschätzt.",
+    "en": "He estimated the costs for the trip."
+  },
+  "schicken": {
+    "de": "Ich habe dir gestern eine E-Mail geschickt.",
+    "en": "I sent you an email yesterday."
+  },
+  "schmecken": {
+    "de": "Die Suppe hat richtig gut geschmeckt.",
+    "en": "The soup tasted really good."
+  },
+  "segeln": {
+    "de": "Wir sind über den ganzen See gesegelt.",
+    "en": "We sailed across the whole lake."
+  },
+  "senken": {
+    "de": "Die Firma hat die Preise gesenkt.",
+    "en": "The company lowered its prices."
+  },
+  "servieren": {
+    "de": "Der Kellner hat uns den Kaffee serviert.",
+    "en": "The waiter served us the coffee."
+  },
+  "sparen": {
+    "de": "Sie hat jeden Monat etwas Geld gespart.",
+    "en": "She saved some money every month."
+  },
+  "spazieren": {
+    "de": "Wir sind am Abend durch den Park spaziert.",
+    "en": "We strolled through the park in the evening."
+  },
+  "speichern": {
+    "de": "Er hat die Datei auf dem Computer gespeichert.",
+    "en": "He saved the file on the computer."
+  },
+  "sperren": {
+    "de": "Die Polizei hat die Straße kurz gesperrt.",
+    "en": "The police briefly blocked the street."
+  },
+  "spülen": {
+    "de": "Er hat den Teller unter dem Wasserhahn gespült.",
+    "en": "He rinsed the plate under the faucet."
+  },
+  "starren": {
+    "de": "Sie hat lange auf das Meer gestarrt.",
+    "en": "She stared at the sea for a long time."
+  },
+  "stecken": {
+    "de": "Er hat den Schlüssel in die Tasche gesteckt.",
+    "en": "He put the key in his pocket."
+  },
+  "steuern": {
+    "de": "Der Pilot hat das Flugzeug sicher gesteuert.",
+    "en": "The pilot steered the plane safely."
+  },
+  "stimmen": {
+    "de": "Seine Antwort hat leider nicht gestimmt.",
+    "en": "Unfortunately, his answer wasn't correct."
+  },
+  "stoppen": {
+    "de": "Der Polizist hat das Auto gestoppt.",
+    "en": "The police officer stopped the car."
+  },
+  "stören": {
+    "de": "Der laute Lärm hat ihn beim Lernen gestört.",
+    "en": "The loud noise disturbed him while he was studying."
+  },
+  "strafen": {
+    "de": "Der Lehrer hat den Schüler für die Lüge gestraft.",
+    "en": "The teacher punished the student for the lie."
+  },
+  "streiken": {
+    "de": "Die Arbeiter haben eine Woche lang gestreikt.",
+    "en": "The workers went on strike for a week."
+  },
+  "stricken": {
+    "de": "Meine Oma hat mir einen Pullover gestrickt.",
+    "en": "My grandma knitted me a sweater."
+  },
+  "tauschen": {
+    "de": "Du hast deinen Platz mit mir getauscht.",
+    "en": "You swapped your seat with me."
+  },
+  "testen": {
+    "de": "Die Firma hat das neue Produkt getestet.",
+    "en": "The company tested the new product."
+  },
+  "tippen": {
+    "de": "Sie hat die Nachricht schnell getippt.",
+    "en": "She typed the message quickly."
+  },
+  "töten": {
+    "de": "Der Jäger hat das verletzte Tier getötet.",
+    "en": "The hunter killed the injured animal."
+  },
+  "trainieren": {
+    "de": "Er hat jeden Tag im Fitnessstudio trainiert.",
+    "en": "He trained at the gym every day."
+  },
+  "träumen": {
+    "de": "Ich habe letzte Nacht von dir geträumt.",
+    "en": "I dreamed about you last night."
+  },
+  "trennen": {
+    "de": "Sie hat die Wäsche nach Farben getrennt.",
+    "en": "She separated the laundry by color."
+  },
+  "trocknen": {
+    "de": "Sie hat die nassen Haare mit dem Handtuch getrocknet.",
+    "en": "She dried her wet hair with a towel."
+  },
+  "überraschen": {
+    "de": "Die Nachricht hat uns alle überrascht.",
+    "en": "The news surprised all of us."
+  },
+  "überzeugen": {
+    "de": "Er hat seine Chefin von der Idee überzeugt.",
+    "en": "He convinced his boss of the idea."
+  },
+  "unterstützen": {
+    "de": "Meine Familie hat mich immer unterstützt.",
+    "en": "My family has always supported me."
+  },
+  "untersuchen": {
+    "de": "Der Arzt hat den Patienten gründlich untersucht.",
+    "en": "The doctor examined the patient thoroughly."
+  },
+  "verabschieden": {
+    "de": "Er hat sich von seinen Freunden verabschiedet.",
+    "en": "He said goodbye to his friends."
+  },
+  "verfolgen": {
+    "de": "Die Polizei hat den Dieb verfolgt.",
+    "en": "The police pursued the thief."
+  },
+  "verhindern": {
+    "de": "Der Regen hat das Fußballspiel verhindert.",
+    "en": "The rain prevented the soccer game."
+  },
+  "verletzen": {
+    "de": "Er hat sich beim Fußball am Bein verletzt.",
+    "en": "He hurt his leg while playing soccer."
+  },
+  "vermuten": {
+    "de": "Ich habe vermutet, dass er zu spät kommt.",
+    "en": "I assumed that he would be late."
+  },
+  "verstecken": {
+    "de": "Sie hat das Geschenk im Schrank versteckt.",
+    "en": "She hid the gift in the closet."
+  },
+  "vertrauen": {
+    "de": "Sie hat ihrem besten Freund immer vertraut.",
+    "en": "She always trusted her best friend."
+  },
+  "verursachen": {
+    "de": "Der Unfall hat einen großen Stau verursacht.",
+    "en": "The accident caused a big traffic jam."
+  },
+  "verwalten": {
+    "de": "Er hat die Finanzen der Firma verwaltet.",
+    "en": "He managed the company's finances."
+  },
+  "verwenden": {
+    "de": "Sie hat frisches Gemüse für das Rezept verwendet.",
+    "en": "She used fresh vegetables for the recipe."
+  },
+  "verzichten": {
+    "de": "Er hat einen Monat lang auf Zucker verzichtet.",
+    "en": "He gave up sugar for a month."
+  },
+  "vorbereiten": {
+    "de": "Sie hat die Präsentation gut vorbereitet.",
+    "en": "She prepared the presentation well."
+  },
+  "wählen": {
+    "de": "Er hat das blaue Hemd gewählt.",
+    "en": "He chose the blue shirt."
+  },
+  "warnen": {
+    "de": "Der Wetterdienst hat vor dem Sturm gewarnt.",
+    "en": "The weather service warned about the storm."
+  },
+  "zahlen": {
+    "de": "Wir haben die Rechnung sofort gezahlt.",
+    "en": "We paid the bill right away."
+  },
+  "zählen": {
+    "de": "Das Kind hat bis zwanzig gezählt.",
+    "en": "The child counted to twenty."
+  },
+  "zerstören": {
+    "de": "Der Sturm hat viele Häuser zerstört.",
+    "en": "The storm destroyed many houses."
+  },
+  "zittern": {
+    "de": "Sie hat am ganzen Körper vor Kälte gezittert.",
+    "en": "She was shivering all over from the cold."
+  },
+  "zustimmen": {
+    "de": "Er hat dem Vorschlag sofort zugestimmt.",
+    "en": "He agreed to the proposal right away."
+  }
+};
+
   function mk(row,type){
-    return {i:row[0], p:row[1], pp:row[2], a:row[3], e:row[4], t:type};
+    return {i:row[0], p:row[1], pp:row[2], a:row[3], e:row[4], t:type, ex: EXAMPLES[row[0]]};
   }
   var VERBS = IRREGULAR.map(function(r){return mk(r,"x");})
     .concat(REGULAR.map(function(r){return mk(r,"r");}));
@@ -695,7 +2260,7 @@
   var els = {};
   ["settingsBtn","settingsPanel","translationToggle","poolSelect","lengthSelect",
    "applySettingsBtn","statRound","statScore","statStreak","progressFill","card","infinitive",
-   "gloss","rows","checkBtn","dontKnowBtn","nextBtn","summary","summaryScore","summaryStreak","missedList",
+   "gloss","exampleBlock","exampleDe","exampleEn","rows","checkBtn","dontKnowBtn","nextBtn","summary","summaryScore","summaryStreak","missedList",
    "playAgainBtn","changeSettingsBtn","app","poolOptAll","poolOptIrregular","poolOptRegular",
    "footCount"].forEach(function(id){ els[id]=document.getElementById(id); });
 
@@ -767,6 +2332,9 @@
     var v = c.verb;
     els.infinitive.textContent = v.i;
     els.gloss.textContent = state.settings.translation ? v.e : "";
+    els.exampleBlock.hidden = true;
+    els.exampleDe.textContent = "";
+    els.exampleEn.textContent = "";
     els.rows.innerHTML = "";
     els.checkBtn.hidden = false;
     els.dontKnowBtn.hidden = false;
@@ -852,6 +2420,13 @@
     }
   }
 
+  function showExample(v){
+    if(!v.ex) return;
+    els.exampleDe.textContent = v.ex.de;
+    els.exampleEn.textContent = v.ex.en;
+    els.exampleBlock.hidden = false;
+  }
+
   function grade(){
     var c = currentCard();
     var v = c.verb;
@@ -894,6 +2469,7 @@
     }
 
     state.session.checked = true;
+    showExample(v);
     els.checkBtn.hidden = true;
     els.dontKnowBtn.hidden = true;
     els.nextBtn.hidden = false;
@@ -923,6 +2499,7 @@
     state.session.missed.push(v);
 
     state.session.checked = true;
+    showExample(v);
     els.checkBtn.hidden = true;
     els.dontKnowBtn.hidden = true;
     els.nextBtn.hidden = false;
