@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Verbnester</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#eef1ec;
+    --paper-raised:#ffffff;
+    --ink:#1b2430;
+    --ink-muted:#5c6672;
+    --rule:#ccd3c6;
+    --grid-line:rgba(27,36,48,.05);
+    --royal:#1e4c9a;
+    --royal-soft:#e3ebf9;
+    --gold:#9c7318;
+    --good:#276b3d;
+    --good-soft:#e2f3e6;
+    --bad:#a5352a;
+    --bad-soft:#fbe7e4;
+    --shadow:0 1px 2px rgba(27,36,48,.06),0 10px 28px rgba(27,36,48,.08);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#131820;
+      --paper-raised:#1b232c;
+      --ink:#e9ede8;
+      --ink-muted:#9aa5ad;
+      --rule:#303b46;
+      --grid-line:rgba(233,237,232,.055);
+      --royal:#82a9ea;
+      --royal-soft:#1f2f4d;
+      --gold:#e0b84d;
+      --good:#71cd8f;
+      --good-soft:#1b3324;
+      --bad:#e57667;
+      --bad-soft:#3a231f;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.5);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#131820;
+    --paper-raised:#1b232c;
+    --ink:#e9ede8;
+    --ink-muted:#9aa5ad;
+    --rule:#303b46;
+    --grid-line:rgba(233,237,232,.055);
+    --royal:#82a9ea;
+    --royal-soft:#1f2f4d;
+    --gold:#e0b84d;
+    --good:#71cd8f;
+    --good-soft:#1b3324;
+    --bad:#e57667;
+    --bad-soft:#3a231f;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.5);
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+    background-size:26px 26px;
+    color:var(--ink);
+    font-family:'Work Sans',system-ui,sans-serif;
+    padding-inline:16px;
+    padding-block:20px 40px;
+  }
+  h1,h2{font-family:'Fraunces',Georgia,serif;margin:0;}
+  .wrap{max-width:640px;margin-inline:auto;display:flex;flex-direction:column;gap:16px;}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .brand h1{font-size:1.6rem;font-weight:700;letter-spacing:-.01em;}
+  .brand .tagline{margin:2px 0 0;font-size:.78rem;color:var(--ink-muted);letter-spacing:.03em;}
+  .icon-btn{
+    width:40px;height:40px;border-radius:10px;border:1px solid var(--rule);
+    background:var(--paper-raised);color:var(--ink);font-size:1.1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex:none;
+    transition:transform .15s ease,border-color .15s ease;
+  }
+  .icon-btn:hover{border-color:var(--royal);}
+  .icon-btn:active{transform:scale(.94);}
+  .icon-btn:focus-visible,button:focus-visible,select:focus-visible{
+    outline:2px solid var(--royal);outline-offset:2px;
+  }
+
+  .panel{
+    background:var(--paper-raised);border:1px solid var(--rule);border-radius:14px;
+    padding:16px;box-shadow:var(--shadow);display:grid;gap:14px;
+  }
+  .field-group{display:grid;gap:6px;}
+  .field-group label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
+  select{
+    font:inherit;font-family:'Work Sans',sans-serif;padding:8px 10px;border-radius:8px;
+    border:1px solid var(--rule);background:var(--paper);color:var(--ink);
+  }
+  .panel-note{font-size:.78rem;color:var(--ink-muted);margin:0;}
+
+  .stats-bar{display:flex;gap:10px;}
+  .stat{
+    flex:1;background:var(--paper-raised);border:1px solid var(--rule);border-radius:12px;
+    padding:10px 12px;display:flex;flex-direction:column;gap:2px;
+  }
+  .stat-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
+  .stat-value{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1.05rem;}
+  .progress-track{height:6px;border-radius:999px;background:var(--rule);overflow:hidden;}
+  .progress-fill{height:100%;background:var(--royal);width:0%;transition:width .25s ease;}
+
+  .card{
+    background:var(--paper-raised);border:1px solid var(--rule);border-radius:16px;
+    padding:24px 20px;box-shadow:var(--shadow);display:grid;gap:20px;
+  }
+  .card-top{text-align:center;display:grid;gap:6px;}
+  .stem{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:clamp(1.6rem,6vw,2.2rem);text-wrap:balance;}
+  .stem-gloss{font-style:italic;color:var(--ink-muted);font-size:.92rem;}
+  .instructions{font-size:.82rem;color:var(--ink-muted);text-align:center;margin:0;}
+
+  .rows{display:grid;gap:10px;}
+  .p-row{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:12px;
+    border:1px dashed var(--rule);background:var(--paper);transition:background .15s ease,border-color .15s ease;
+  }
+  .p-row.drop-hover{border-color:var(--royal);background:var(--royal-soft);}
+  .p-row.is-correct{border-style:solid;background:var(--good-soft);border-color:var(--good);}
+  .p-row.is-wrong{border-style:solid;background:var(--bad-soft);border-color:var(--bad);}
+  .p-row.is-revealed{border-style:solid;background:var(--royal-soft);border-color:var(--royal);}
+  .p-row.is-missing{border-color:var(--bad);}
+  .p-word{display:flex;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:600;}
+  .p-slot{
+    min-width:52px;height:30px;display:inline-flex;align-items:center;justify-content:center;
+    border-bottom:2px dashed var(--ink-muted);color:var(--royal);font-weight:700;cursor:pointer;
+    padding-inline:4px;border-radius:4px;
+  }
+  .p-slot.filled{border-bottom-style:solid;border-color:var(--royal);}
+  .p-row.is-correct .p-slot{color:var(--good);border-color:var(--good);}
+  .p-row.is-wrong .p-slot{color:var(--bad);border-color:var(--bad);}
+  .p-row.is-revealed .p-slot{color:var(--royal);border-color:var(--royal);}
+  .p-stem{color:var(--ink);}
+  .p-gloss{font-family:'Work Sans',sans-serif;font-size:.85rem;font-weight:400;color:var(--ink-muted);}
+  .p-reveal{width:100%;font-size:.8rem;color:var(--ink-muted);}
+  .p-reveal strong{color:var(--ink);font-family:'JetBrains Mono',monospace;}
+
+  .pool-label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);margin:0;}
+  .pool{
+    display:flex;flex-wrap:wrap;gap:8px;padding:14px;border-radius:12px;
+    border:1px solid var(--rule);background:var(--paper);min-height:52px;
+  }
+  .pool.drop-hover{border-color:var(--royal);}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:600;padding:8px 12px;border-radius:999px;
+    border:1px solid var(--rule);background:var(--paper-raised);color:var(--royal);cursor:grab;
+    transition:border-color .15s ease,background .15s ease,transform .1s ease;
+  }
+  .chip:hover{border-color:var(--royal);}
+  .chip.selected{background:var(--royal);color:#fff;border-color:var(--royal);transform:translateY(-2px);}
+  .chip:active{cursor:grabbing;}
+  .chip.dragging{opacity:.4;}
+
+  .card-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+  .btn{
+    font:inherit;font-weight:600;padding:12px 28px;border-radius:999px;border:1px solid var(--royal);
+    background:var(--royal);color:#fff;cursor:pointer;transition:transform .12s ease,opacity .15s ease;
+  }
+  .btn:hover{opacity:.92;}
+  .btn:active{transform:scale(.97);}
+  .btn.secondary{background:transparent;color:var(--royal);}
+  .btn:disabled{opacity:.5;cursor:default;}
+
+  .summary{text-align:center;display:grid;gap:16px;}
+  .summary .big-score{font-family:'JetBrains Mono',monospace;font-size:2.4rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--royal);}
+  .missed-list{text-align:left;display:grid;gap:8px;max-height:300px;overflow-y:auto;padding-right:4px;}
+  .missed-item{border:1px solid var(--rule);border-radius:10px;padding:10px 12px;font-size:.88rem;}
+  .missed-item b{font-family:'JetBrains Mono',monospace;}
+  .missed-item .row-line{color:var(--ink-muted);margin-top:2px;}
+  .summary-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .streak-flag{font-size:.78rem;color:var(--gold);font-weight:600;}
+
+  .foot{text-align:center;font-size:.78rem;color:var(--ink-muted);margin-top:4px;}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" lang="de">
+  <header class="topbar">
+    <div class="brand">
+      <h1>Verbnester</h1>
+      <p class="tagline">Präfix · Bedeutung · Zuordnung</p>
+    </div>
+    <button id="settingsBtn" class="icon-btn" type="button" aria-label="Einstellungen" aria-expanded="false">⚙</button>
+  </header>
+
+  <section id="settingsPanel" class="panel" hidden>
+    <div class="field-group">
+      <label for="lengthSelect">Rundenlänge</label>
+      <select id="lengthSelect">
+        <option value="10">10 Verbnester</option>
+        <option value="20" selected>20 Verbnester</option>
+        <option value="all">Alle Verbnester</option>
+      </select>
+    </div>
+    <p class="panel-note">Jede Runde zeigt einen Stammverb mit seinen Präfix-Ableitungen. Ordne die Präfixe den passenden Bedeutungen zu — der Vorrat enthält 1-2 Präfixe, die zu keiner Zeile passen.</p>
+    <div class="card-actions">
+      <button id="applySettingsBtn" class="btn" type="button">Neue Runde starten</button>
+    </div>
+  </section>
+
+  <main id="app">
+    <div class="stats-bar">
+      <div class="stat"><span class="stat-label">Runde</span><span id="statRound" class="stat-value">1 / 20</span></div>
+      <div class="stat"><span class="stat-label">Richtig</span><span id="statScore" class="stat-value">0</span></div>
+      <div class="stat"><span class="stat-label">Serie</span><span id="statStreak" class="stat-value">0</span></div>
+    </div>
+    <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+    <section id="card" class="card" aria-live="polite">
+      <div class="card-top">
+        <div class="stem" id="stemWord">—</div>
+        <div class="stem-gloss" id="stemGloss"></div>
+      </div>
+      <p class="instructions">Tippe ein Präfix an und dann die passende Zeile — oder zieh es direkt hinein.</p>
+      <div class="rows" id="rows"></div>
+      <p class="pool-label">Präfixe</p>
+      <div class="pool" id="pool"></div>
+      <div class="card-actions">
+        <button id="checkBtn" class="btn" type="button">Prüfen</button>
+        <button id="dontKnowBtn" class="btn secondary" type="button">Ich weiß es nicht 😢</button>
+        <button id="nextBtn" class="btn" type="button" hidden>Weiter →</button>
+      </div>
+    </section>
+  </main>
+
+  <section id="summary" class="card summary" hidden>
+    <h2>Runde beendet</h2>
+    <div class="big-score" id="summaryScore">0%</div>
+    <p class="streak-flag" id="summaryStreak"></p>
+    <div id="missedWrap">
+      <p class="panel-note" style="text-align:left;">Zum Wiederholen:</p>
+      <div class="missed-list" id="missedList"></div>
+    </div>
+    <div class="summary-actions">
+      <button id="playAgainBtn" class="btn" type="button">Nochmal spielen</button>
+      <button id="changeSettingsBtn" class="btn secondary" type="button">Einstellungen ändern</button>
+    </div>
+  </section>
+
+  <p class="foot" id="footCount"></p>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var FAMILIES = window.VERB_FAMILIES;
+
+  var ALL_PREFIXES = (function(){
+    var set = {};
+    FAMILIES.forEach(function(f){ f.prefixes.forEach(function(p){ set[p.prefix] = true; }); });
+    return Object.keys(set);
+  })();
+
+  function shuffle(a){
+    var arr = a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var t = arr[i]; arr[i]=arr[j]; arr[j]=t;
+    }
+    return arr;
+  }
+
+  function sampleDecoys(excludePrefixes, n){
+    var ex = {};
+    excludePrefixes.forEach(function(p){ ex[p]=true; });
+    var pool = ALL_PREFIXES.filter(function(p){ return !ex[p]; });
+    return shuffle(pool).slice(0, n);
+  }
+
+  var els = {};
+  ["settingsBtn","settingsPanel","lengthSelect","applySettingsBtn","statRound","statScore",
+   "statStreak","progressFill","card","stemWord","stemGloss","rows","pool","checkBtn",
+   "dontKnowBtn","nextBtn","summary","summaryScore","summaryStreak","missedList",
+   "playAgainBtn","changeSettingsBtn","app","footCount"].forEach(function(id){ els[id]=document.getElementById(id); });
+
+  els.footCount.textContent = FAMILIES.length + " Verbnester · " +
+    FAMILIES.reduce(function(n,f){return n+f.prefixes.length;},0) + " Präfix-Verben";
+
+  var defaultSettings = {length:20};
+  var state = { settings: defaultSettings, session: null, selectedChip: null };
+
+  function safeSnapshot(){
+    try{
+      if(window.claude && window.claude.hot && typeof window.claude.hot.snapshot === "function"){
+        window.claude.hot.snapshot(state);
+      }
+    }catch(e){}
+  }
+
+  function buildRound(family){
+    var rows = family.prefixes.map(function(p, i){
+      return { id: "r"+i, prefix: p.prefix, word: p.word, gloss: p.gloss };
+    });
+    var decoys = sampleDecoys(rows.map(function(r){return r.prefix;}), 2);
+    var chips = rows.map(function(r,i){ return {id:"c"+i, prefix:r.prefix}; })
+      .concat(decoys.map(function(p,i){ return {id:"d"+i, prefix:p}; }));
+    chips = shuffle(chips);
+    var placements = {};
+    rows.forEach(function(r){ placements[r.id] = null; });
+    return {
+      family: family, rows: rows, chips: chips, placements: placements, checked: false
+    };
+  }
+
+  function newSession(settings){
+    var n = settings.length === "all" ? FAMILIES.length : Math.min(settings.length, FAMILIES.length);
+    var queue = shuffle(FAMILIES).slice(0, n).map(buildRound);
+    return { queue: queue, index: 0, score: 0, total: 0, streak: 0, bestStreak: 0, missed: [] };
+  }
+
+  function currentRound(){ return state.session.queue[state.session.index]; }
+
+  function chipById(round, id){ return round.chips.filter(function(c){return c.id===id;})[0]; }
+
+  function placedChipIds(round){
+    var used = {};
+    Object.keys(round.placements).forEach(function(rid){
+      var cid = round.placements[rid];
+      if(cid) used[cid] = true;
+    });
+    return used;
+  }
+
+  function selectChip(chipId){
+    state.selectedChip = (state.selectedChip === chipId) ? null : chipId;
+    renderRound();
+  }
+
+  function placeInRow(rowId, chipId){
+    var round = currentRound();
+    if(round.checked) return;
+    // if that chip was already sitting in another row, clear it from there
+    Object.keys(round.placements).forEach(function(rid){
+      if(round.placements[rid] === chipId) round.placements[rid] = null;
+    });
+    var displaced = round.placements[rowId];
+    round.placements[rowId] = chipId;
+    // if the row already held a different chip, that chip just returns to the pool (displaced, no swap target)
+    void displaced;
+    state.selectedChip = null;
+    renderRound();
+    safeSnapshot();
+  }
+
+  function rowTapped(rowId){
+    var round = currentRound();
+    if(round.checked) return;
+    if(state.selectedChip){
+      placeInRow(rowId, state.selectedChip);
+    } else if(round.placements[rowId]){
+      state.selectedChip = round.placements[rowId];
+      round.placements[rowId] = null;
+      renderRound();
+    }
+  }
+
+  function poolTapped(){
+    var round = currentRound();
+    if(round.checked) return;
+    if(state.selectedChip && !placedChipIds(round)[state.selectedChip]){
+      state.selectedChip = null;
+      renderRound();
+    }
+  }
+
+  function renderRound(){
+    var round = currentRound();
+    var f = round.family;
+    els.stemWord.textContent = f.stem;
+    els.stemGloss.textContent = f.stemGloss;
+    els.rows.innerHTML = "";
+    els.pool.innerHTML = "";
+
+    var used = placedChipIds(round);
+
+    round.rows.forEach(function(row){
+      var rowEl = document.createElement("div");
+      rowEl.className = "p-row";
+      rowEl.dataset.row = row.id;
+
+      var wordEl = document.createElement("div");
+      wordEl.className = "p-word";
+
+      var slot = document.createElement("span");
+      slot.className = "p-slot";
+      var placedId = round.placements[row.id];
+      if(placedId){
+        var chip = chipById(round, placedId);
+        slot.textContent = chip ? chip.prefix : "";
+        slot.classList.add("filled");
+      } else {
+        slot.textContent = "···";
+      }
+      slot.addEventListener("click", function(){ rowTapped(row.id); });
+      slot.addEventListener("dragover", function(ev){ ev.preventDefault(); rowEl.classList.add("drop-hover"); });
+      slot.addEventListener("dragleave", function(){ rowEl.classList.remove("drop-hover"); });
+      slot.addEventListener("drop", function(ev){
+        ev.preventDefault();
+        rowEl.classList.remove("drop-hover");
+        var cid = ev.dataTransfer.getData("text/plain");
+        if(cid) placeInRow(row.id, cid);
+      });
+
+      var stemEl = document.createElement("span");
+      stemEl.className = "p-stem";
+      stemEl.textContent = f.stem;
+
+      wordEl.appendChild(slot);
+      wordEl.appendChild(stemEl);
+
+      var glossEl = document.createElement("span");
+      glossEl.className = "p-gloss";
+      glossEl.textContent = "— " + row.gloss;
+
+      rowEl.appendChild(wordEl);
+      rowEl.appendChild(glossEl);
+
+      if(round.checked){
+        var ok = placedId && chipById(round, placedId) && chipById(round, placedId).prefix === row.prefix;
+        rowEl.classList.add(ok ? "is-correct" : "is-wrong");
+        if(!ok){
+          var reveal = document.createElement("div");
+          reveal.className = "p-reveal";
+          reveal.innerHTML = "Richtig: <strong>" + row.prefix + "-" + f.stem + "</strong>";
+          rowEl.appendChild(reveal);
+        }
+      } else if(!placedId){
+        rowEl.classList.toggle("is-missing", !!round._showMissing);
+      }
+
+      els.rows.appendChild(rowEl);
+    });
+
+    round.chips.forEach(function(chip){
+      if(used[chip.id]) return;
+      var chipEl = document.createElement("button");
+      chipEl.type = "button";
+      chipEl.className = "chip";
+      chipEl.textContent = chip.prefix + "-";
+      chipEl.draggable = true;
+      chipEl.dataset.chip = chip.id;
+      if(state.selectedChip === chip.id) chipEl.classList.add("selected");
+      chipEl.addEventListener("click", function(){ selectChip(chip.id); });
+      chipEl.addEventListener("dragstart", function(ev){
+        ev.dataTransfer.setData("text/plain", chip.id);
+        chipEl.classList.add("dragging");
+      });
+      chipEl.addEventListener("dragend", function(){ chipEl.classList.remove("dragging"); });
+      els.pool.appendChild(chipEl);
+    });
+
+    els.checkBtn.hidden = round.checked;
+    els.dontKnowBtn.hidden = round.checked;
+    els.nextBtn.hidden = !round.checked;
+
+    updateStats();
+  }
+
+  function grade(){
+    var round = currentRound();
+    var missing = Object.keys(round.placements).some(function(rid){ return !round.placements[rid]; });
+    if(missing){
+      round._showMissing = true;
+      renderRound();
+      return;
+    }
+    round.checked = true;
+    var allCorrect = true;
+    round.rows.forEach(function(row){
+      var placedId = round.placements[row.id];
+      var chip = chipById(round, placedId);
+      var ok = chip && chip.prefix === row.prefix;
+      state.session.total++;
+      if(ok){ state.session.score++; } else { allCorrect = false; }
+    });
+    if(allCorrect){
+      state.session.streak++;
+      state.session.bestStreak = Math.max(state.session.bestStreak, state.session.streak);
+    } else {
+      state.session.streak = 0;
+      state.session.missed.push(round);
+    }
+    renderRound();
+    els.nextBtn.focus();
+    safeSnapshot();
+  }
+
+  function revealAnswer(){
+    var round = currentRound();
+    if(round.checked) return;
+    round.checked = true;
+    round.rows.forEach(function(row){
+      state.session.total++;
+    });
+    round._revealed = true;
+    state.session.streak = 0;
+    state.session.missed.push(round);
+    renderRoundRevealed();
+    els.nextBtn.focus();
+    safeSnapshot();
+  }
+
+  function renderRoundRevealed(){
+    var round = currentRound();
+    renderRound();
+    // repaint rows as revealed instead of wrong, showing the correct prefix in the slot
+    var rowEls = els.rows.querySelectorAll(".p-row");
+    round.rows.forEach(function(row, i){
+      var rowEl = rowEls[i];
+      rowEl.classList.remove("is-wrong","is-correct");
+      rowEl.classList.add("is-revealed");
+      var slot = rowEl.querySelector(".p-slot");
+      slot.textContent = row.prefix;
+      slot.classList.add("filled");
+      var existingReveal = rowEl.querySelector(".p-reveal");
+      if(existingReveal) existingReveal.remove();
+    });
+  }
+
+  function advance(){
+    state.session.index++;
+    if(state.session.index >= state.session.queue.length){
+      showSummary();
+    } else {
+      renderRound();
+    }
+    safeSnapshot();
+  }
+
+  function updateStats(){
+    var s = state.session;
+    els.statRound.textContent = Math.min(s.index+1, s.queue.length) + " / " + s.queue.length;
+    els.statScore.textContent = s.score + "/" + s.total;
+    els.statStreak.textContent = s.streak;
+    els.progressFill.style.width = Math.round((s.index / s.queue.length) * 100) + "%";
+  }
+
+  function showSummary(){
+    els.card.hidden = true;
+    document.querySelector(".stats-bar").hidden = true;
+    document.querySelector(".progress-track").hidden = true;
+    els.summary.hidden = false;
+    var s = state.session;
+    var pct = s.total ? Math.round((s.score / s.total) * 100) : 0;
+    els.summaryScore.textContent = pct + "%";
+    els.summaryStreak.textContent = s.bestStreak >= 3 ? ("Beste Serie: " + s.bestStreak + " 🔥") : "";
+    els.missedList.innerHTML = "";
+    if(s.missed.length === 0){
+      var p = document.createElement("p");
+      p.className = "panel-note";
+      p.textContent = "Alles richtig — keine Wiederholung nötig.";
+      els.missedList.appendChild(p);
+    } else {
+      var seen = {};
+      s.missed.forEach(function(round){
+        var f = round.family;
+        if(seen[f.stem]) return;
+        seen[f.stem] = true;
+        var item = document.createElement("div");
+        item.className = "missed-item";
+        var lines = round.rows.map(function(r){ return r.prefix + "-" + f.stem + " — " + r.gloss; }).join("<br>");
+        item.innerHTML = "<b>" + f.stem + "</b> (" + f.stemGloss + ")<div class=\"row-line\">" + lines + "</div>";
+        els.missedList.appendChild(item);
+      });
+    }
+  }
+
+  function startSession(){
+    els.summary.hidden = true;
+    els.card.hidden = false;
+    document.querySelector(".stats-bar").hidden = false;
+    document.querySelector(".progress-track").hidden = false;
+    state.session = newSession(state.settings);
+    state.selectedChip = null;
+    renderRound();
+    safeSnapshot();
+  }
+
+  function wireEvents(){
+    els.settingsBtn.addEventListener("click", function(){
+      var willShow = els.settingsPanel.hidden;
+      els.settingsPanel.hidden = !willShow;
+      els.settingsBtn.setAttribute("aria-expanded", willShow ? "true" : "false");
+    });
+    els.applySettingsBtn.addEventListener("click", function(){
+      var lv = els.lengthSelect.value;
+      state.settings.length = lv === "all" ? "all" : parseInt(lv, 10);
+      els.settingsPanel.hidden = true;
+      els.settingsBtn.setAttribute("aria-expanded", "false");
+      startSession();
+    });
+    els.checkBtn.addEventListener("click", grade);
+    els.dontKnowBtn.addEventListener("click", revealAnswer);
+    els.nextBtn.addEventListener("click", advance);
+    els.playAgainBtn.addEventListener("click", startSession);
+    els.changeSettingsBtn.addEventListener("click", function(){
+      els.settingsPanel.hidden = false;
+      els.settingsBtn.setAttribute("aria-expanded", "true");
+      els.summary.hidden = true;
+      document.querySelector(".stats-bar").hidden = false;
+      document.querySelector(".progress-track").hidden = false;
+      els.card.hidden = false;
+    });
+    els.pool.addEventListener("click", function(ev){
+      if(ev.target === els.pool) poolTapped();
+    });
+    els.pool.addEventListener("dragover", function(ev){ ev.preventDefault(); els.pool.classList.add("drop-hover"); });
+    els.pool.addEventListener("dragleave", function(){ els.pool.classList.remove("drop-hover"); });
+    els.pool.addEventListener("drop", function(ev){
+      ev.preventDefault();
+      els.pool.classList.remove("drop-hover");
+      var cid = ev.dataTransfer.getData("text/plain");
+      var round = currentRound();
+      if(cid && !round.checked){
+        Object.keys(round.placements).forEach(function(rid){
+          if(round.placements[rid] === cid) round.placements[rid] = null;
+        });
+        renderRound();
+        safeSnapshot();
+      }
+    });
+  }
+
+  function boot(initial){
+    var restored = initial && initial.settings ? initial : null;
+    state.settings = (restored && restored.settings) || Object.assign({}, defaultSettings);
+    wireEvents();
+    if(restored && restored.session){
+      state.session = restored.session;
+      state.selectedChip = null;
+      if(state.session.index >= state.session.queue.length){
+        showSummary();
+      } else {
+        renderRound();
+      }
+    } else {
+      startSession();
+    }
+  }
+
+  if(window.claude && window.claude.hot && window.claude.hot.ready){
+    window.claude.hot.ready(boot);
+  } else {
+    boot((window.claude && window.claude.hot && window.claude.hot.data) || {});
+  }
+})();
+</script>
+</body>
+</html>
