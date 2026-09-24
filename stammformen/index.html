@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stammformen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#eef1ec;
+    --paper-raised:#ffffff;
+    --ink:#1b2430;
+    --ink-muted:#5c6672;
+    --rule:#ccd3c6;
+    --grid-line:rgba(27,36,48,.05);
+    --royal:#1e4c9a;
+    --royal-soft:#e3ebf9;
+    --gold:#9c7318;
+    --good:#276b3d;
+    --good-soft:#e1f2e5;
+    --bad:#a5352a;
+    --bad-soft:#fbe7e4;
+    --shadow:0 1px 2px rgba(27,36,48,.06),0 10px 28px rgba(27,36,48,.08);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#131820;
+      --paper-raised:#1b232c;
+      --ink:#e9ede8;
+      --ink-muted:#9aa5ad;
+      --rule:#303b46;
+      --grid-line:rgba(233,237,232,.055);
+      --royal:#82a9ea;
+      --royal-soft:#1f2f4d;
+      --gold:#e0b84d;
+      --good:#71cd8f;
+      --good-soft:#1b3324;
+      --bad:#e57667;
+      --bad-soft:#3a231f;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.5);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#131820;
+    --paper-raised:#1b232c;
+    --ink:#e9ede8;
+    --ink-muted:#9aa5ad;
+    --rule:#303b46;
+    --grid-line:rgba(233,237,232,.055);
+    --royal:#82a9ea;
+    --royal-soft:#1f2f4d;
+    --gold:#e0b84d;
+    --good:#71cd8f;
+    --good-soft:#1b3324;
+    --bad:#e57667;
+    --bad-soft:#3a231f;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.5);
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+    background-size:26px 26px;
+    color:var(--ink);
+    font-family:'Work Sans',system-ui,sans-serif;
+    padding-inline:16px;
+    padding-block:20px 40px;
+  }
+  h1,h2{font-family:'Fraunces',Georgia,serif;margin:0;}
+  .wrap{max-width:640px;margin-inline:auto;display:flex;flex-direction:column;gap:16px;}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .brand{display:flex;align-items:baseline;gap:10px;}
+  .brand h1{font-size:1.6rem;font-weight:700;letter-spacing:-.01em;}
+  .brand .tagline{margin:2px 0 0;font-size:.78rem;color:var(--ink-muted);letter-spacing:.03em;}
+  .icon-btn{
+    width:40px;height:40px;border-radius:10px;border:1px solid var(--rule);
+    background:var(--paper-raised);color:var(--ink);font-size:1.1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex:none;
+    transition:transform .15s ease,border-color .15s ease;
+  }
+  .icon-btn:hover{border-color:var(--royal);}
+  .icon-btn:active{transform:scale(.94);}
+  .icon-btn:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{
+    outline:2px solid var(--royal);outline-offset:2px;
+  }
+
+  .panel{
+    background:var(--paper-raised);border:1px solid var(--rule);border-radius:14px;
+    padding:16px;box-shadow:var(--shadow);display:grid;gap:14px;
+  }
+  .field-group{display:grid;gap:6px;}
+  .field-group label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
+  .field-row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  select{
+    font:inherit;font-family:'Work Sans',sans-serif;padding:8px 10px;border-radius:8px;
+    border:1px solid var(--rule);background:var(--paper);color:var(--ink);
+  }
+  .switch{
+    position:relative;width:44px;height:26px;flex:none;border-radius:999px;
+    background:var(--rule);border:none;cursor:pointer;transition:background .15s ease;
+  }
+  .switch::after{
+    content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+    background:var(--paper-raised);box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .15s ease;
+  }
+  .switch[aria-pressed="true"]{background:var(--royal);}
+  .switch[aria-pressed="true"]::after{transform:translateX(18px);}
+  .panel-note{font-size:.78rem;color:var(--ink-muted);margin:0;}
+
+  .stats-bar{display:flex;gap:10px;}
+  .stat{
+    flex:1;background:var(--paper-raised);border:1px solid var(--rule);border-radius:12px;
+    padding:10px 12px;display:flex;flex-direction:column;gap:2px;
+  }
+  .stat-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
+  .stat-value{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1.05rem;}
+  .progress-track{height:6px;border-radius:999px;background:var(--rule);overflow:hidden;}
+  .progress-fill{height:100%;background:var(--royal);width:0%;transition:width .25s ease;}
+
+  .card{
+    background:var(--paper-raised);border:1px solid var(--rule);border-radius:16px;
+    padding:24px 20px;box-shadow:var(--shadow);display:grid;gap:20px;
+  }
+  .card-top{text-align:center;display:grid;gap:6px;}
+  .infinitive{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:clamp(1.8rem,7vw,2.6rem);text-wrap:balance;}
+  .gloss{font-style:italic;color:var(--ink-muted);font-size:.95rem;min-height:1.2em;}
+
+  .rows{display:grid;gap:14px;}
+  .row{display:grid;gap:8px;padding:12px;border-radius:12px;border:1px solid var(--rule);background:var(--paper);transition:background .15s ease,border-color .15s ease;}
+  .row.is-correct{background:var(--good-soft);border-color:var(--good);}
+  .row.is-wrong{background:var(--bad-soft);border-color:var(--bad);}
+  .row.is-revealed{background:var(--royal-soft);border-color:var(--royal);}
+  .row.is-missing{border-color:var(--bad);}
+  .row-label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
+  .field-input{
+    font-family:'JetBrains Mono',monospace;font-size:1.05rem;padding:10px 12px;
+    border-radius:8px;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink);width:100%;
+  }
+  .row.is-correct .field-input{border-color:var(--good);}
+  .row.is-wrong .field-input{border-color:var(--bad);}
+  .row.is-revealed .field-input{border-color:var(--royal);}
+  .aux-options{display:flex;gap:8px;}
+  .aux-btn{
+    flex:1;font-family:'JetBrains Mono',monospace;font-size:1rem;padding:10px 8px;border-radius:8px;
+    border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink);cursor:pointer;
+    transition:border-color .15s ease,background .15s ease;
+  }
+  .aux-btn.selected{border-color:var(--royal);background:var(--royal-soft);}
+  .aux-btn.was-correct{border-color:var(--good);}
+  .aux-btn:disabled{cursor:default;opacity:.85;}
+  .row.is-correct .aux-btn.selected{border-color:var(--good);background:var(--good-soft);}
+  .row.is-wrong .aux-btn.selected{border-color:var(--bad);background:var(--bad-soft);}
+  .row.is-revealed .aux-btn.was-correct{border-color:var(--royal);background:var(--royal-soft);}
+  .reveal{font-size:.85rem;color:var(--ink-muted);}
+  .reveal strong{color:var(--ink);font-family:'JetBrains Mono',monospace;font-weight:600;}
+
+  .card-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+  .btn{
+    font:inherit;font-weight:600;padding:12px 28px;border-radius:999px;border:1px solid var(--royal);
+    background:var(--royal);color:#fff;cursor:pointer;transition:transform .12s ease,opacity .15s ease;
+  }
+  .btn:hover{opacity:.92;}
+  .btn:active{transform:scale(.97);}
+  .btn.secondary{background:transparent;color:var(--royal);}
+
+  .summary{text-align:center;display:grid;gap:16px;}
+  .summary .big-score{font-family:'JetBrains Mono',monospace;font-size:2.4rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--royal);}
+  .missed-list{text-align:left;display:grid;gap:8px;max-height:260px;overflow-y:auto;padding-right:4px;}
+  .missed-item{border:1px solid var(--rule);border-radius:10px;padding:10px 12px;font-size:.9rem;}
+  .missed-item b{font-family:'JetBrains Mono',monospace;}
+  .missed-item .gl{color:var(--ink-muted);font-style:italic;}
+  .summary-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .streak-flag{font-size:.78rem;color:var(--gold);font-weight:600;}
+
+  .foot{text-align:center;font-size:.78rem;color:var(--ink-muted);margin-top:4px;}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" lang="de">
+  <header class="topbar">
+    <div class="brand">
+      <div>
+        <h1>Stammformen</h1>
+        <p class="tagline">Präteritum · Partizip&nbsp;II · Hilfsverb</p>
+      </div>
+    </div>
+    <button id="settingsBtn" class="icon-btn" type="button" aria-label="Einstellungen" aria-expanded="false">⚙</button>
+  </header>
+
+  <section id="settingsPanel" class="panel" hidden>
+    <div class="field-group">
+      <div class="field-row">
+        <label for="translationToggle" style="margin:0;">Übersetzung anzeigen</label>
+        <button id="translationToggle" class="switch" type="button" role="switch" aria-checked="true" aria-pressed="true" aria-label="Übersetzung anzeigen"></button>
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="poolSelect">Verbauswahl</label>
+      <select id="poolSelect">
+        <option value="all" id="poolOptAll">Alle Verben</option>
+        <option value="irregular" id="poolOptIrregular">Nur unregelmäßige</option>
+        <option value="regular" id="poolOptRegular">Nur regelmäßige</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label for="lengthSelect">Rundenlänge</label>
+      <select id="lengthSelect">
+        <option value="10">10 Verben</option>
+        <option value="20" selected>20 Verben</option>
+        <option value="40">40 Verben</option>
+        <option value="all">Alle in der Auswahl</option>
+      </select>
+    </div>
+    <p class="panel-note">Tipp: Du kannst ä/ö/ü/ß auch als ae/oe/ue/ss eintippen.</p>
+    <div class="card-actions">
+      <button id="applySettingsBtn" class="btn" type="button">Neue Runde starten</button>
+    </div>
+  </section>
+
+  <main id="app">
+    <div class="stats-bar">
+      <div class="stat"><span class="stat-label">Runde</span><span id="statRound" class="stat-value">1 / 20</span></div>
+      <div class="stat"><span class="stat-label">Richtig</span><span id="statScore" class="stat-value">0</span></div>
+      <div class="stat"><span class="stat-label">Serie</span><span id="statStreak" class="stat-value">0</span></div>
+    </div>
+    <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+    <section id="card" class="card" aria-live="polite">
+      <div class="card-top">
+        <div class="infinitive" id="infinitive">—</div>
+        <div class="gloss" id="gloss" lang="en"></div>
+      </div>
+      <div class="rows" id="rows"></div>
+      <div class="card-actions">
+        <button id="checkBtn" class="btn" type="button">Prüfen</button>
+        <button id="dontKnowBtn" class="btn secondary" type="button">Ich weiß es nicht 😢</button>
+        <button id="nextBtn" class="btn" type="button" hidden>Weiter →</button>
+      </div>
+    </section>
+  </main>
+
+  <section id="summary" class="card summary" hidden>
+    <h2>Runde beendet</h2>
+    <div class="big-score" id="summaryScore">0%</div>
+    <p class="streak-flag" id="summaryStreak"></p>
+    <div id="missedWrap">
+      <p class="panel-note" style="text-align:left;">Zum Wiederholen:</p>
+      <div class="missed-list" id="missedList"></div>
+    </div>
+    <div class="summary-actions">
+      <button id="playAgainBtn" class="btn" type="button">Nochmal spielen</button>
+      <button id="changeSettingsBtn" class="btn secondary" type="button">Einstellungen ändern</button>
+    </div>
+  </section>
+
+  <p class="foot" id="footCount"></p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var IRREGULAR = [
+    ["sein","war","gewesen","ist","to be"],
+    ["haben","hatte","gehabt","hat","to have"],
+    ["werden","wurde","geworden","ist","to become"],
+    ["gehen","ging","gegangen","ist","to go, walk"],
+    ["kommen","kam","gekommen","ist","to come"],
+    ["sehen","sah","gesehen","hat","to see"],
+    ["geben","gab","gegeben","hat","to give"],
+    ["nehmen","nahm","genommen","hat","to take"],
+    ["finden","fand","gefunden","hat","to find"],
+    ["sprechen","sprach","gesprochen","hat","to speak"],
+    ["lesen","las","gelesen","hat","to read"],
+    ["schreiben","schrieb","geschrieben","hat","to write"],
+    ["fahren","fuhr","gefahren","ist","to drive, go"],
+    ["fliegen","flog","geflogen","ist","to fly"],
+    ["laufen","lief","gelaufen","ist","to run, walk"],
+    ["essen","aß","gegessen","hat","to eat"],
+    ["trinken","trank","getrunken","hat","to drink"],
+    ["schlafen","schlief","geschlafen","hat","to sleep"],
+    ["tragen","trug","getragen","hat","to carry, wear"],
+    ["treffen","traf","getroffen","hat","to meet"],
+    ["bleiben","blieb","geblieben","ist","to stay"],
+    ["steigen","stieg","gestiegen","ist","to climb, rise"],
+    ["ziehen","zog","gezogen","hat","to pull, draw"],
+    ["fließen","floss","geflossen","ist","to flow"],
+    ["schließen","schloss","geschlossen","hat","to close"],
+    ["genießen","genoss","genossen","hat","to enjoy"],
+    ["verlieren","verlor","verloren","hat","to lose"],
+    ["gewinnen","gewann","gewonnen","hat","to win"],
+    ["beginnen","begann","begonnen","hat","to begin"],
+    ["schwimmen","schwamm","geschwommen",["ist","hat"],"to swim"],
+    ["singen","sang","gesungen","hat","to sing"],
+    ["springen","sprang","gesprungen","ist","to jump"],
+    ["sitzen","saß","gesessen","hat","to sit"],
+    ["liegen","lag","gelegen","hat","to lie (be lying)"],
+    ["stehen","stand","gestanden","hat","to stand"],
+    ["fallen","fiel","gefallen","ist","to fall"],
+    ["helfen","half","geholfen","hat","to help"],
+    ["sterben","starb","gestorben","ist","to die"],
+    ["werfen","warf","geworfen","hat","to throw"],
+    ["brechen","brach","gebrochen","hat","to break"],
+    ["treten","trat","getreten","ist","to step"],
+    ["vergessen","vergaß","vergessen","hat","to forget"],
+    ["waschen","wusch","gewaschen","hat","to wash"],
+    ["wachsen","wuchs","gewachsen","ist","to grow"],
+    ["tun","tat","getan","hat","to do"],
+    ["rufen","rief","gerufen","hat","to call"],
+    ["laden","lud","geladen","hat","to load, invite"],
+    ["schlagen","schlug","geschlagen","hat","to hit"],
+    ["backen",["backte","buk"],"gebacken","hat","to bake"],
+    ["fangen","fing","gefangen","hat","to catch"],
+    ["halten","hielt","gehalten","hat","to hold, stop"],
+    ["lassen","ließ","gelassen","hat","to let, leave"],
+    ["raten","riet","geraten","hat","to advise, guess"],
+    ["schneiden","schnitt","geschnitten","hat","to cut"],
+    ["leiden","litt","gelitten","hat","to suffer"],
+    ["reiten","ritt","geritten",["ist","hat"],"to ride (a horse)"],
+    ["scheinen","schien","geschienen","hat","to shine, seem"],
+    ["schweigen","schwieg","geschwiegen","hat","to be silent"],
+    ["beweisen","bewies","bewiesen","hat","to prove"],
+    ["entscheiden","entschied","entschieden","hat","to decide"],
+    ["verbieten","verbot","verboten","hat","to forbid"],
+    ["bieten","bot","geboten","hat","to offer"],
+    ["fliehen","floh","geflohen","ist","to flee"],
+    ["wiegen","wog","gewogen","hat","to weigh"],
+    ["lügen","log","gelogen","hat","to lie (untruth)"],
+    ["betrügen","betrog","betrogen","hat","to deceive"],
+    ["verlassen","verließ","verlassen","hat","to leave (a place)"],
+    ["empfehlen","empfahl","empfohlen","hat","to recommend"],
+    ["stehlen","stahl","gestohlen","hat","to steal"],
+    ["befehlen","befahl","befohlen","hat","to command"],
+    ["messen","maß","gemessen","hat","to measure"],
+    ["vergleichen","verglich","verglichen","hat","to compare"],
+    ["greifen","griff","gegriffen","hat","to grasp, grab"],
+    ["bringen","brachte","gebracht","hat","to bring"],
+    ["denken","dachte","gedacht","hat","to think"],
+    ["kennen","kannte","gekannt","hat","to know (be acquainted)"],
+    ["nennen","nannte","genannt","hat","to name"],
+    ["rennen","rannte","gerannt","ist","to run (race)"],
+    ["brennen","brannte","gebrannt","hat","to burn"],
+    ["wissen","wusste","gewusst","hat","to know (a fact)"],
+    ["gefallen","gefiel","gefallen","hat","to please, like"],
+    ["wenden",["wandte","wendete"],["gewandt","gewendet"],"hat","to turn"],
+    ["senden",["sandte","sendete"],["gesandt","gesendet"],"hat","to send"],
+    ["erschrecken","erschrak","erschrocken","ist","to be startled"],
+    ["verschwinden","verschwand","verschwunden","ist","to disappear"],
+    ["gelingen","gelang","gelungen","ist","to succeed"],
+    ["misslingen","misslang","misslungen","ist","to fail"],
+    ["klingen","klang","geklungen","hat","to sound"],
+    ["gelten","galt","gegolten","hat","to be valid, count as"],
+    ["verstehen","verstand","verstanden","hat","to understand"],
+    ["bestehen","bestand","bestanden","hat","to pass (an exam), consist"],
+    ["entstehen","entstand","entstanden","ist","to arise, originate"],
+    ["gefrieren","gefror","gefroren","ist","to freeze, solidify"],
+    ["frieren","fror","gefroren","hat","to be cold"],
+    ["schmelzen","schmolz","geschmolzen","ist","to melt"],
+    ["riechen","roch","gerochen","hat","to smell"],
+    ["kriechen","kroch","gekrochen","ist","to crawl"],
+    ["biegen","bog","gebogen","hat","to bend (something)"],
+    ["besitzen","besaß","besessen","hat","to own"],
+    ["schieben","schob","geschoben","hat","to push"],
+    ["fressen","fraß","gefressen","hat","to eat (of animals)"],
+    ["betreten","betrat","betreten","hat","to step onto, enter"],
+    ["verbergen","verbarg","verborgen","hat","to hide (something)"],
+    ["bergen","barg","geborgen","hat","to salvage, harbor"],
+    ["werben","warb","geworben","hat","to advertise, recruit"],
+    ["verderben","verdarb","verdorben","ist","to spoil, go bad"],
+    ["schwellen","schwoll","geschwollen","ist","to swell"],
+    ["pfeifen","pfiff","gepfiffen","hat","to whistle"],
+    ["kneifen","kniff","gekniffen","hat","to pinch"],
+    ["beißen","biss","gebissen","hat","to bite"],
+    ["reißen","riss","gerissen","hat","to tear, rip (something)"],
+    ["gleiten","glitt","geglitten","ist","to glide, slide"],
+    ["schleichen","schlich","geschlichen","ist","to sneak, creep"],
+    ["weichen","wich","gewichen","ist","to yield, give way"],
+    ["verzeihen","verzieh","verziehen","hat","to forgive"],
+    ["leihen","lieh","geliehen","hat","to lend, borrow"],
+    ["gedeihen","gedieh","gediehen","ist","to thrive, flourish"],
+    ["preisen","pries","gepriesen","hat","to praise"],
+    ["gießen","goss","gegossen","hat","to pour, water (plants)"],
+    ["schießen","schoss","geschossen","hat","to shoot"],
+    ["binden","band","gebunden","hat","to tie, bind"],
+    ["verbinden","verband","verbunden","hat","to connect, bandage"],
+    ["empfinden","empfand","empfunden","hat","to feel, sense"],
+    ["sinken","sank","gesunken","ist","to sink"],
+    ["zwingen","zwang","gezwungen","hat","to force"],
+    ["schwingen","schwang","geschwungen","hat","to swing"],
+    ["ringen","rang","gerungen","hat","to wrestle, struggle"],
+    ["dringen","drang","gedrungen","ist","to penetrate"],
+    ["heben","hob","gehoben","hat","to lift"],
+    ["unterscheiden","unterschied","unterschieden","hat","to distinguish"],
+    ["bekommen","bekam","bekommen","hat","to get, receive"],
+    ["enthalten","enthielt","enthalten","hat","to contain"],
+    ["erhalten","erhielt","erhalten","hat","to receive, preserve"],
+    ["unterhalten","unterhielt","unterhalten","hat","to entertain"],
+    ["anfangen","fing an","angefangen","hat","to begin, start"],
+    ["aufstehen","stand auf","aufgestanden","ist","to get up"],
+    ["verschieben","verschob","verschoben","hat","to postpone"],
+    ["einladen","lud ein","eingeladen","hat","to invite"],
+    ["anziehen","zog an","angezogen","hat","to put on, get dressed"],
+    ["ausziehen","zog aus","ausgezogen","ist","to move out"],
+    ["umziehen","zog um","umgezogen","ist","to move, relocate"],
+    ["vorziehen","zog vor","vorgezogen","hat","to prefer"],
+    ["übernehmen","übernahm","übernommen","hat","to take over"],
+    ["unternehmen","unternahm","unternommen","hat","to undertake, do (an activity)"],
+    ["teilnehmen","nahm teil","teilgenommen","hat","to take part, participate"],
+    ["abnehmen","nahm ab","abgenommen","hat","to lose weight, take off"],
+    ["zunehmen","nahm zu","zugenommen","hat","to gain weight, increase"],
+    ["vorschlagen","schlug vor","vorgeschlagen","hat","to suggest, propose"],
+    ["auffallen","fiel auf","aufgefallen","ist","to be noticeable, stand out"],
+    ["einfallen","fiel ein","eingefallen","ist","to occur to (mind)"],
+    ["überfallen","überfiel","überfallen","hat","to attack, raid"],
+    ["behalten","behielt","behalten","hat","to keep"],
+    ["anhalten","hielt an","angehalten","hat","to stop"],
+    ["festhalten","hielt fest","festgehalten","hat","to hold onto, keep"],
+    ["entlassen","entließ","entlassen","hat","to dismiss, release"],
+    ["zulassen","ließ zu","zugelassen","hat","to permit, allow"],
+    ["loslassen","ließ los","losgelassen","hat","to let go"],
+    ["hinterlassen","hinterließ","hinterlassen","hat","to leave behind"],
+    ["übersehen","übersah","übersehen","hat","to overlook, miss"],
+    ["fernsehen","sah fern","ferngesehen","hat","to watch TV"],
+    ["aussehen","sah aus","ausgesehen","hat","to look, appear"],
+    ["vorlesen","las vor","vorgelesen","hat","to read aloud"],
+    ["beschreiben","beschrieb","beschrieben","hat","to describe"],
+    ["unterschreiben","unterschrieb","unterschrieben","hat","to sign"],
+    ["verschreiben","verschrieb","verschrieben","hat","to prescribe"],
+    ["anbieten","bot an","angeboten","hat","to offer"],
+    ["anrufen","rief an","angerufen","hat","to call (phone)"],
+    ["aufrufen","rief auf","aufgerufen","hat","to call upon, summon"],
+    ["hervorrufen","rief hervor","hervorgerufen","hat","to cause, evoke"],
+    ["beraten","beriet","beraten","hat","to advise"],
+    ["übertreiben","übertrieb","übertrieben","hat","to exaggerate"],
+    ["vertreiben","vertrieb","vertrieben","hat","to drive away, distribute"],
+    ["betreiben","betrieb","betrieben","hat","to operate, run (a business)"],
+    ["abschließen","schloss ab","abgeschlossen","hat","to complete, close"],
+    ["ausschließen","schloss aus","ausgeschlossen","hat","to exclude"],
+    ["einschließen","schloss ein","eingeschlossen","hat","to include, lock in"],
+    ["beschließen","beschloss","beschlossen","hat","to decide, resolve"],
+    ["verschlafen","verschlief","verschlafen","hat","to oversleep"],
+    ["einschlafen","schlief ein","eingeschlafen","ist","to fall asleep"],
+    ["mitnehmen","nahm mit","mitgenommen","hat","to take along"],
+    ["wegnehmen","nahm weg","weggenommen","hat","to take away"],
+    ["annehmen","nahm an","angenommen","hat","to assume, accept"],
+    ["treiben","trieb","getrieben","hat","to drive, do (sports)"],
+    ["weisen","wies","gewiesen","hat","to point, show"],
+    ["gleichen","glich","geglichen","hat","to resemble"],
+    ["schleifen","schliff","geschliffen","hat","to grind, sharpen"],
+    ["schwören","schwor","geschworen","hat","to swear (an oath)"],
+    ["erwägen","erwog","erwogen","hat","to consider, contemplate"],
+    ["rinnen","rann","geronnen","ist","to trickle, flow"],
+    ["mahlen","mahlte","gemahlen","hat","to grind (coffee, flour)"],
+    ["stattfinden","fand statt","stattgefunden","hat","to take place"],
+    ["stinken","stank","gestunken","hat","to stink"],
+    ["meiden","mied","gemieden","hat","to avoid"],
+    ["vermeiden","vermied","vermieden","hat","to avoid"]
+  ];
+
+  var REGULAR = [
+    ["machen","machte","gemacht","hat","to do, make"],
+    ["sagen","sagte","gesagt","hat","to say"],
+    ["spielen","spielte","gespielt","hat","to play"],
+    ["lernen","lernte","gelernt","hat","to learn"],
+    ["lieben","liebte","geliebt","hat","to love"],
+    ["wohnen","wohnte","gewohnt","hat","to live, reside"],
+    ["kaufen","kaufte","gekauft","hat","to buy"],
+    ["suchen","suchte","gesucht","hat","to search"],
+    ["brauchen","brauchte","gebraucht","hat","to need"],
+    ["fragen","fragte","gefragt","hat","to ask"],
+    ["antworten","antwortete","geantwortet","hat","to answer"],
+    ["arbeiten","arbeitete","gearbeitet","hat","to work"],
+    ["warten","wartete","gewartet","hat","to wait"],
+    ["öffnen","öffnete","geöffnet","hat","to open"],
+    ["kochen","kochte","gekocht","hat","to cook"],
+    ["putzen","putzte","geputzt","hat","to clean"],
+    ["tanzen","tanzte","getanzt","hat","to dance"],
+    ["hören","hörte","gehört","hat","to hear, listen"],
+    ["holen","holte","geholt","hat","to fetch, get"],
+    ["zeigen","zeigte","gezeigt","hat","to show"],
+    ["legen","legte","gelegt","hat","to lay, put"],
+    ["stellen","stellte","gestellt","hat","to place, put"],
+    ["setzen","setzte","gesetzt","hat","to set, place"],
+    ["packen","packte","gepackt","hat","to pack"],
+    ["sammeln","sammelte","gesammelt","hat","to collect"],
+    ["wechseln","wechselte","gewechselt","hat","to change, exchange"],
+    ["lächeln","lächelte","gelächelt","hat","to smile"],
+    ["glauben","glaubte","geglaubt","hat","to believe"],
+    ["hoffen","hoffte","gehofft","hat","to hope"],
+    ["leben","lebte","gelebt","hat","to live, be alive"],
+    ["dauern","dauerte","gedauert","hat","to last"],
+    ["feiern","feierte","gefeiert","hat","to celebrate"],
+    ["besuchen","besuchte","besucht","hat","to visit"],
+    ["bezahlen","bezahlte","bezahlt","hat","to pay"],
+    ["bestellen","bestellte","bestellt","hat","to order"],
+    ["verkaufen","verkaufte","verkauft","hat","to sell"],
+    ["versuchen","versuchte","versucht","hat","to try"],
+    ["verdienen","verdiente","verdient","hat","to earn"],
+    ["erzählen","erzählte","erzählt","hat","to tell, narrate"],
+    ["erklären","erklärte","erklärt","hat","to explain"],
+    ["entdecken","entdeckte","entdeckt","hat","to discover"],
+    ["gehören","gehörte","gehört","hat","to belong"],
+    ["beobachten","beobachtete","beobachtet","hat","to observe"],
+    ["studieren","studierte","studiert","hat","to study"],
+    ["probieren","probierte","probiert","hat","to try, taste"],
+    ["telefonieren","telefonierte","telefoniert","hat","to phone"],
+    ["diskutieren","diskutierte","diskutiert","hat","to discuss"],
+    ["organisieren","organisierte","organisiert","hat","to organize"],
+    ["reparieren","reparierte","repariert","hat","to repair"],
+    ["reservieren","reservierte","reserviert","hat","to reserve"],
+    ["informieren","informierte","informiert","hat","to inform"],
+    ["interessieren","interessierte","interessiert","hat","to interest"],
+    ["fotografieren","fotografierte","fotografiert","hat","to photograph"],
+    ["buchstabieren","buchstabierte","buchstabiert","hat","to spell"],
+    ["funktionieren","funktionierte","funktioniert","hat","to function, work"],
+    ["passieren","passierte","passiert","ist","to happen"],
+    ["reisen","reiste","gereist","ist","to travel"],
+    ["wandern","wanderte","gewandert","ist","to hike"],
+    ["reagieren","reagierte","reagiert","hat","to react"],
+    ["gratulieren","gratulierte","gratuliert","hat","to congratulate"],
+    ["duschen","duschte","geduscht","hat","to shower"],
+    ["rasieren","rasierte","rasiert","hat","to shave"],
+    ["parken","parkte","geparkt","hat","to park"],
+    ["tanken","tankte","getankt","hat","to refuel"],
+    ["mieten","mietete","gemietet","hat","to rent"],
+    ["heiraten","heiratete","geheiratet","hat","to marry"],
+    ["atmen","atmete","geatmet","hat","to breathe"],
+    ["rechnen","rechnete","gerechnet","hat","to calculate"],
+    ["zeichnen","zeichnete","gezeichnet","hat","to draw"],
+    ["regnen","regnete","geregnet","hat","to rain"],
+    ["schneien","schneite","geschneit","hat","to snow"],
+    ["lachen","lachte","gelacht","hat","to laugh"],
+    ["weinen","weinte","geweint","hat","to cry"],
+    ["kämpfen","kämpfte","gekämpft","hat","to fight"],
+    ["üben","übte","geübt","hat","to practice"],
+    ["danken","dankte","gedankt","hat","to thank"],
+    ["schenken","schenkte","geschenkt","hat","to give (a gift)"],
+    ["mischen","mischte","gemischt","hat","to mix"],
+    ["wiederholen","wiederholte","wiederholt","hat","to repeat"],
+    ["übersetzen","übersetzte","übersetzt","hat","to translate"],
+    ["wünschen","wünschte","gewünscht","hat","to wish"],
+    ["benutzen","benutzte","benutzt","hat","to use"],
+    ["verbrauchen","verbrauchte","verbraucht","hat","to consume, use up"],
+    ["verbessern","verbesserte","verbessert","hat","to improve, correct"],
+    ["ändern","änderte","geändert","hat","to change, alter"],
+    ["verändern","veränderte","verändert","hat","to change (something)"],
+    ["entwickeln","entwickelte","entwickelt","hat","to develop"],
+    ["entspannen","entspannte","entspannt","hat","to relax"],
+    ["ausmachen","machte aus","ausgemacht","hat","to turn off, agree on"],
+    ["einschalten","schaltete ein","eingeschaltet","hat","to switch on"],
+    ["ausschalten","schaltete aus","ausgeschaltet","hat","to switch off"],
+    ["bedeuten","bedeutete","bedeutet","hat","to mean"],
+    ["beeindrucken","beeindruckte","beeindruckt","hat","to impress"],
+    ["bewundern","bewunderte","bewundert","hat","to admire"],
+    ["bemerken","bemerkte","bemerkt","hat","to notice"],
+    ["betrachten","betrachtete","betrachtet","hat","to view, observe"],
+    ["beschäftigen","beschäftigte","beschäftigt","hat","to occupy, employ"],
+    ["beeinflussen","beeinflusste","beeinflusst","hat","to influence"],
+    ["beleidigen","beleidigte","beleidigt","hat","to insult"],
+    ["buchen","buchte","gebucht","hat","to book"],
+    ["bauen","baute","gebaut","hat","to build"],
+    ["dienen","diente","gedient","hat","to serve"],
+    ["drucken","druckte","gedruckt","hat","to print"],
+    ["drücken","drückte","gedrückt","hat","to press, push"],
+    ["eilen","eilte","geeilt","ist","to hurry"],
+    ["erinnern","erinnerte","erinnert","hat","to remember, remind"],
+    ["erledigen","erledigte","erledigt","hat","to take care of, finish"],
+    ["ermöglichen","ermöglichte","ermöglicht","hat","to enable, make possible"],
+    ["erreichen","erreichte","erreicht","hat","to reach, achieve"],
+    ["ersetzen","ersetzte","ersetzt","hat","to replace"],
+    ["existieren","existierte","existiert","hat","to exist"],
+    ["folgen","folgte","gefolgt","ist","to follow"],
+    ["fühlen","fühlte","gefühlt","hat","to feel"],
+    ["füllen","füllte","gefüllt","hat","to fill"],
+    ["grüßen","grüßte","gegrüßt","hat","to greet"],
+    ["handeln","handelte","gehandelt","hat","to act, trade"],
+    ["heilen","heilte","geheilt","ist","to heal, get better"],
+    ["interviewen","interviewte","interviewt","hat","to interview"],
+    ["kleben","klebte","geklebt","hat","to stick, glue"],
+    ["kritisieren","kritisierte","kritisiert","hat","to criticize"],
+    ["kümmern","kümmerte","gekümmert","hat","to take care of"],
+    ["klettern","kletterte","geklettert","ist","to climb"],
+    ["klingeln","klingelte","geklingelt","hat","to ring (a bell)"],
+    ["landen","landete","gelandet","ist","to land"],
+    ["leiten","leitete","geleitet","hat","to lead, manage"],
+    ["leuchten","leuchtete","geleuchtet","hat","to shine, glow"],
+    ["liefern","lieferte","geliefert","hat","to deliver"],
+    ["loben","lobte","gelobt","hat","to praise"],
+    ["lösen","löste","gelöst","hat","to solve, dissolve"],
+    ["malen","malte","gemalt","hat","to paint"],
+    ["meinen","meinte","gemeint","hat","to mean, think (opinion)"],
+    ["melden","meldete","gemeldet","hat","to report"],
+    ["merken","merkte","gemerkt","hat","to notice, remember"],
+    ["nutzen","nutzte","genutzt","hat","to use"],
+    ["passen","passte","gepasst","hat","to fit, suit"],
+    ["pflegen","pflegte","gepflegt","hat","to take care of, maintain"],
+    ["prüfen","prüfte","geprüft","hat","to test, check"],
+    ["rauchen","rauchte","geraucht","hat","to smoke"],
+    ["reden","redete","geredet","hat","to talk, speak"],
+    ["regieren","regierte","regiert","hat","to govern"],
+    ["reinigen","reinigte","gereinigt","hat","to clean"],
+    ["retten","rettete","gerettet","hat","to save, rescue"],
+    ["schaffen","schaffte","geschafft","hat","to manage, accomplish"],
+    ["schätzen","schätzte","geschätzt","hat","to estimate, value"],
+    ["schicken","schickte","geschickt","hat","to send"],
+    ["schmecken","schmeckte","geschmeckt","hat","to taste"],
+    ["segeln","segelte","gesegelt","ist","to sail"],
+    ["senken","senkte","gesenkt","hat","to lower, reduce"],
+    ["servieren","servierte","serviert","hat","to serve (food)"],
+    ["sparen","sparte","gespart","hat","to save (money)"],
+    ["spazieren","spazierte","spaziert","ist","to stroll, walk"],
+    ["speichern","speicherte","gespeichert","hat","to save, store (data)"],
+    ["sperren","sperrte","gesperrt","hat","to block, lock"],
+    ["spülen","spülte","gespült","hat","to rinse, wash dishes"],
+    ["starren","starrte","gestarrt","hat","to stare"],
+    ["stecken","steckte","gesteckt","hat","to put, stick (something)"],
+    ["steuern","steuerte","gesteuert","hat","to steer, control"],
+    ["stimmen","stimmte","gestimmt","hat","to be correct, vote"],
+    ["stoppen","stoppte","gestoppt","hat","to stop"],
+    ["stören","störte","gestört","hat","to disturb"],
+    ["strafen","strafte","gestraft","hat","to punish"],
+    ["streiken","streikte","gestreikt","hat","to strike (labor)"],
+    ["stricken","strickte","gestrickt","hat","to knit"],
+    ["tauschen","tauschte","getauscht","hat","to swap, exchange"],
+    ["testen","testete","getestet","hat","to test"],
+    ["tippen","tippte","getippt","hat","to type"],
+    ["töten","tötete","getötet","hat","to kill"],
+    ["trainieren","trainierte","trainiert","hat","to train"],
+    ["träumen","träumte","geträumt","hat","to dream"],
+    ["trennen","trennte","getrennt","hat","to separate"],
+    ["trocknen","trocknete","getrocknet","hat","to dry"],
+    ["überraschen","überraschte","überrascht","hat","to surprise"],
+    ["überzeugen","überzeugte","überzeugt","hat","to convince"],
+    ["unterstützen","unterstützte","unterstützt","hat","to support"],
+    ["untersuchen","untersuchte","untersucht","hat","to examine, investigate"],
+    ["verabschieden","verabschiedete","verabschiedet","hat","to say goodbye (to)"],
+    ["verfolgen","verfolgte","verfolgt","hat","to pursue, follow"],
+    ["verhindern","verhinderte","verhindert","hat","to prevent"],
+    ["verletzen","verletzte","verletzt","hat","to injure, hurt"],
+    ["vermuten","vermutete","vermutet","hat","to suspect, assume"],
+    ["verstecken","versteckte","versteckt","hat","to hide (something)"],
+    ["vertrauen","vertraute","vertraut","hat","to trust"],
+    ["verursachen","verursachte","verursacht","hat","to cause"],
+    ["verwalten","verwaltete","verwaltet","hat","to manage, administer"],
+    ["verwenden",["verwendete","verwandte"],["verwendet","verwandt"],"hat","to use, employ"],
+    ["verzichten","verzichtete","verzichtet","hat","to do without, renounce"],
+    ["vorbereiten","bereitete vor","vorbereitet","hat","to prepare"],
+    ["wählen","wählte","gewählt","hat","to choose, vote, dial"],
+    ["warnen","warnte","gewarnt","hat","to warn"],
+    ["zahlen","zahlte","gezahlt","hat","to pay"],
+    ["zählen","zählte","gezählt","hat","to count"],
+    ["zerstören","zerstörte","zerstört","hat","to destroy"],
+    ["zittern","zitterte","gezittert","hat","to tremble, shiver"],
+    ["zustimmen","stimmte zu","zugestimmt","hat","to agree"]
+  ];
+
+  function mk(row,type){
+    return {i:row[0], p:row[1], pp:row[2], a:row[3], e:row[4], t:type};
+  }
+  var VERBS = IRREGULAR.map(function(r){return mk(r,"x");})
+    .concat(REGULAR.map(function(r){return mk(r,"r");}));
+
+  function arr(x){ return Array.isArray(x) ? x : [x]; }
+  function canon(s){
+    return String(s).trim().toLowerCase()
+      .replace(/\s+/g," ")
+      .replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss");
+  }
+  function matches(userInput, accepted){
+    var c = canon(userInput);
+    if(!c) return false;
+    return arr(accepted).some(function(v){ return canon(v) === c; });
+  }
+  function shuffle(a){
+    var arr2 = a.slice();
+    for(var i=arr2.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var t = arr2[i]; arr2[i]=arr2[j]; arr2[j]=t;
+    }
+    return arr2;
+  }
+  var els = {};
+  ["settingsBtn","settingsPanel","translationToggle","poolSelect","lengthSelect",
+   "applySettingsBtn","statRound","statScore","statStreak","progressFill","card","infinitive",
+   "gloss","rows","checkBtn","dontKnowBtn","nextBtn","summary","summaryScore","summaryStreak","missedList",
+   "playAgainBtn","changeSettingsBtn","app","poolOptAll","poolOptIrregular","poolOptRegular",
+   "footCount"].forEach(function(id){ els[id]=document.getElementById(id); });
+
+  (function fillVerbCounts(){
+    var nIrr = VERBS.filter(function(v){return v.t==="x";}).length;
+    var nReg = VERBS.filter(function(v){return v.t==="r";}).length;
+    els.poolOptAll.textContent = "Alle Verben (" + VERBS.length + ")";
+    els.poolOptIrregular.textContent = "Nur unregelmäßige (" + nIrr + ")";
+    els.poolOptRegular.textContent = "Nur regelmäßige (" + nReg + ")";
+    els.footCount.textContent = VERBS.length + " Verben – " + nReg + " regelmäßig, " + nIrr + " unregelmäßig";
+  })();
+
+  var defaultSettings = {translation:true, pool:"all", length:20};
+  var state = { settings: defaultSettings, session: null };
+
+  function safeSnapshot(){
+    try{
+      if(window.claude && window.claude.hot && typeof window.claude.hot.snapshot === "function"){
+        window.claude.hot.snapshot(state);
+      }
+    }catch(e){}
+  }
+  function loadLocal(){
+    try{
+      var raw = localStorage.getItem("stammformen.settings");
+      if(raw){
+        var parsed = JSON.parse(raw);
+        return Object.assign({}, defaultSettings, parsed);
+      }
+    }catch(e){}
+    return null;
+  }
+  function saveLocal(s){
+    try{ localStorage.setItem("stammformen.settings", JSON.stringify(s)); }catch(e){}
+  }
+
+  function poolFor(settings){
+    if(settings.pool === "irregular") return VERBS.filter(function(v){return v.t==="x";});
+    if(settings.pool === "regular") return VERBS.filter(function(v){return v.t==="r";});
+    return VERBS.slice();
+  }
+
+  function newSession(settings){
+    var pool = poolFor(settings);
+    var n = settings.length === "all" ? pool.length : Math.min(settings.length, pool.length);
+    var queue = shuffle(pool).slice(0, n).map(function(v){
+      return { verb: v };
+    });
+    return { queue: queue, index: 0, score: 0, total: 0, streak: 0, bestStreak: 0, missed: [], checked: false };
+  }
+
+  function currentCard(){
+    return state.session.queue[state.session.index];
+  }
+
+  function fieldSpec(currentInf){
+    var pPh = "z. B. zog", ppPh = "z. B. gezogen";
+    if(currentInf === "ziehen"){ pPh = "z. B. kam"; ppPh = "z. B. gekommen"; }
+    return [
+      {key:"p", label:"Präteritum (er/sie/es)", ph:pPh},
+      {key:"pp", label:"Partizip II", ph:ppPh},
+      {key:"a", label:"Hilfsverb", isAux:true}
+    ];
+  }
+
+  function renderCard(){
+    state.session.checked = false;
+    var c = currentCard();
+    var v = c.verb;
+    els.infinitive.textContent = v.i;
+    els.gloss.textContent = state.settings.translation ? v.e : "";
+    els.rows.innerHTML = "";
+    els.checkBtn.hidden = false;
+    els.dontKnowBtn.hidden = false;
+    els.nextBtn.hidden = true;
+    els.card.querySelectorAll(".row").forEach(function(r){ r.remove(); });
+
+    fieldSpec(v.i).forEach(function(spec){
+      var row = document.createElement("div");
+      row.className = "row";
+      row.dataset.field = spec.key;
+
+      var label = document.createElement("div");
+      label.className = "row-label";
+      label.textContent = spec.label;
+      row.appendChild(label);
+
+      if(spec.isAux){
+        var optionsWrap = document.createElement("div");
+        optionsWrap.className = "aux-options";
+        ["hat","ist"].forEach(function(opt){
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "aux-btn";
+          b.textContent = opt;
+          b.dataset.value = opt;
+          b.addEventListener("click", function(){
+            if(state.session.checked) return;
+            optionsWrap.querySelectorAll(".aux-btn").forEach(function(x){ x.classList.remove("selected"); });
+            b.classList.add("selected");
+            row.classList.remove("is-missing");
+          });
+          optionsWrap.appendChild(b);
+        });
+        row.appendChild(optionsWrap);
+      } else {
+        var input = document.createElement("input");
+        input.type = "text";
+        input.className = "field-input";
+        input.id = "field-" + spec.key;
+        input.placeholder = spec.ph;
+        input.autocomplete = "off";
+        input.autocapitalize = "off";
+        input.spellcheck = false;
+        input.addEventListener("input", function(){ row.classList.remove("is-missing"); });
+        input.addEventListener("keydown", function(ev){
+          if(ev.key === "Enter"){
+            ev.preventDefault();
+            if(state.session.checked){ advance(); } else { grade(); }
+          }
+        });
+        row.appendChild(input);
+      }
+
+      var reveal = document.createElement("div");
+      reveal.className = "reveal";
+      reveal.hidden = true;
+      row.appendChild(reveal);
+
+      els.rows.appendChild(row);
+    });
+
+    updateStats();
+  }
+
+  function readAnswer(spec){
+    var row = els.rows.querySelector('.row[data-field="'+spec.key+'"]');
+    if(spec.isAux){
+      var sel = row.querySelector(".aux-btn.selected");
+      return sel ? sel.dataset.value : "";
+    }
+    var input = row.querySelector(".field-input");
+    return input ? input.value : "";
+  }
+
+  function disableFieldInputs(row, spec, accepted){
+    if(spec.isAux){
+      row.querySelectorAll(".aux-btn").forEach(function(btn){
+        btn.disabled = true;
+        if(matches(btn.dataset.value, accepted)) btn.classList.add("was-correct");
+      });
+    } else {
+      row.querySelector(".field-input").disabled = true;
+    }
+  }
+
+  function grade(){
+    var c = currentCard();
+    var v = c.verb;
+    var specs = fieldSpec();
+    var missing = false;
+
+    specs.forEach(function(spec){
+      var val = readAnswer(spec);
+      if(!val || !val.trim()){
+        els.rows.querySelector('.row[data-field="'+spec.key+'"]').classList.add("is-missing");
+        missing = true;
+      }
+    });
+    if(missing) return;
+
+    var allCorrect = true;
+    specs.forEach(function(spec){
+      var row = els.rows.querySelector('.row[data-field="'+spec.key+'"]');
+      var val = readAnswer(spec);
+      var accepted = spec.isAux ? v.a : v[spec.key];
+      var ok = matches(val, accepted);
+      row.classList.add(ok ? "is-correct" : "is-wrong");
+      state.session.total++;
+      if(ok){ state.session.score++; } else { allCorrect = false; }
+
+      var reveal = row.querySelector(".reveal");
+      if(!ok){
+        reveal.hidden = false;
+        reveal.innerHTML = "Richtig: <strong>" + arr(accepted).join(" / ") + "</strong>";
+      }
+      disableFieldInputs(row, spec, accepted);
+    });
+
+    if(allCorrect){
+      state.session.streak++;
+      state.session.bestStreak = Math.max(state.session.bestStreak, state.session.streak);
+    } else {
+      state.session.streak = 0;
+      state.session.missed.push(v);
+    }
+
+    state.session.checked = true;
+    els.checkBtn.hidden = true;
+    els.dontKnowBtn.hidden = true;
+    els.nextBtn.hidden = false;
+    els.nextBtn.focus();
+    updateStats();
+    safeSnapshot();
+  }
+
+  function revealAnswer(){
+    if(state.session.checked) return;
+    var c = currentCard();
+    var v = c.verb;
+
+    fieldSpec().forEach(function(spec){
+      var row = els.rows.querySelector('.row[data-field="'+spec.key+'"]');
+      var accepted = spec.isAux ? v.a : v[spec.key];
+      row.classList.remove("is-missing");
+      row.classList.add("is-revealed");
+      var reveal = row.querySelector(".reveal");
+      reveal.hidden = false;
+      reveal.innerHTML = "Richtig: <strong>" + arr(accepted).join(" / ") + "</strong>";
+      disableFieldInputs(row, spec, accepted);
+      state.session.total++;
+    });
+
+    state.session.streak = 0;
+    state.session.missed.push(v);
+
+    state.session.checked = true;
+    els.checkBtn.hidden = true;
+    els.dontKnowBtn.hidden = true;
+    els.nextBtn.hidden = false;
+    els.nextBtn.focus();
+    updateStats();
+    safeSnapshot();
+  }
+
+  function advance(){
+    state.session.index++;
+    state.session.checked = false;
+    if(state.session.index >= state.session.queue.length){
+      showSummary();
+    } else {
+      renderCard();
+    }
+    safeSnapshot();
+  }
+
+  function updateStats(){
+    var s = state.session;
+    els.statRound.textContent = Math.min(s.index+1, s.queue.length) + " / " + s.queue.length;
+    els.statScore.textContent = s.score + "/" + s.total;
+    els.statStreak.textContent = s.streak;
+    els.progressFill.style.width = Math.round((s.index / s.queue.length) * 100) + "%";
+  }
+
+  function showSummary(){
+    els.card.hidden = true;
+    document.querySelector(".stats-bar").hidden = true;
+    document.querySelector(".progress-track").hidden = true;
+    els.summary.hidden = false;
+    var s = state.session;
+    var pct = s.total ? Math.round((s.score / s.total) * 100) : 0;
+    els.summaryScore.textContent = pct + "%";
+    els.summaryStreak.textContent = s.bestStreak >= 3 ? ("Beste Serie: " + s.bestStreak + " 🔥") : "";
+    els.missedList.innerHTML = "";
+    if(s.missed.length === 0){
+      var p = document.createElement("p");
+      p.className = "panel-note";
+      p.textContent = "Alles richtig — keine Wiederholung nötig.";
+      els.missedList.appendChild(p);
+    } else {
+      var seen = {};
+      s.missed.forEach(function(v){
+        if(seen[v.i]) return;
+        seen[v.i] = true;
+        var item = document.createElement("div");
+        item.className = "missed-item";
+        item.innerHTML = "<b>"+v.i+"</b> — "+arr(v.p).join("/")+" — "+arr(v.pp).join("/")+" ("+v.a+") "+
+          "<div class=\"gl\" lang=\"en\">"+v.e+"</div>";
+        els.missedList.appendChild(item);
+      });
+    }
+  }
+
+  function startSession(){
+    els.summary.hidden = true;
+    els.card.hidden = false;
+    document.querySelector(".stats-bar").hidden = false;
+    document.querySelector(".progress-track").hidden = false;
+    state.session = newSession(state.settings);
+    renderCard();
+    safeSnapshot();
+  }
+
+  function syncSettingsUI(){
+    els.poolSelect.value = state.settings.pool;
+    els.lengthSelect.value = String(state.settings.length);
+    els.translationToggle.setAttribute("aria-pressed", state.settings.translation ? "true" : "false");
+    els.translationToggle.setAttribute("aria-checked", state.settings.translation ? "true" : "false");
+  }
+
+  function wireEvents(){
+    els.settingsBtn.addEventListener("click", function(){
+      var willShow = els.settingsPanel.hidden;
+      els.settingsPanel.hidden = !willShow;
+      els.settingsBtn.setAttribute("aria-expanded", willShow ? "true" : "false");
+    });
+    els.translationToggle.addEventListener("click", function(){
+      state.settings.translation = !state.settings.translation;
+      syncSettingsUI();
+      if(state.session && !state.session.checked){ els.gloss.textContent = state.settings.translation ? currentCard().verb.e : ""; }
+      saveLocal(state.settings);
+      safeSnapshot();
+    });
+    els.applySettingsBtn.addEventListener("click", function(){
+      state.settings.pool = els.poolSelect.value;
+      var lv = els.lengthSelect.value;
+      state.settings.length = lv === "all" ? "all" : parseInt(lv, 10);
+      saveLocal(state.settings);
+      els.settingsPanel.hidden = true;
+      els.settingsBtn.setAttribute("aria-expanded", "false");
+      startSession();
+    });
+    els.checkBtn.addEventListener("click", grade);
+    els.dontKnowBtn.addEventListener("click", revealAnswer);
+    els.nextBtn.addEventListener("click", advance);
+    els.playAgainBtn.addEventListener("click", startSession);
+    els.changeSettingsBtn.addEventListener("click", function(){
+      els.settingsPanel.hidden = false;
+      els.settingsBtn.setAttribute("aria-expanded", "true");
+      els.summary.hidden = true;
+      document.querySelector(".stats-bar").hidden = false;
+      document.querySelector(".progress-track").hidden = false;
+      els.card.hidden = false;
+    });
+  }
+
+  function boot(initial){
+    var restored = initial && initial.settings ? initial : null;
+    state.settings = (restored && restored.settings) || loadLocal() || Object.assign({}, defaultSettings);
+    syncSettingsUI();
+    wireEvents();
+    if(restored && restored.session){
+      state.session = restored.session;
+      if(state.session.index >= state.session.queue.length){
+        showSummary();
+      } else {
+        renderCard();
+      }
+    } else {
+      startSession();
+    }
+  }
+
+  if(window.claude && window.claude.hot && window.claude.hot.ready){
+    window.claude.hot.ready(boot);
+  } else {
+    boot((window.claude && window.claude.hot && window.claude.hot.data) || {});
+  }
+})();
+</script>
+</body>
+</html>

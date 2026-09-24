@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>German Drills</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#eef1ec;
+    --paper-raised:#ffffff;
+    --ink:#1b2430;
+    --ink-muted:#5c6672;
+    --rule:#ccd3c6;
+    --grid-line:rgba(27,36,48,.05);
+    --royal:#1e4c9a;
+    --royal-soft:#e3ebf9;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#131820;
+      --paper-raised:#1b232c;
+      --ink:#e9ede8;
+      --ink-muted:#9aa5ad;
+      --rule:#303b46;
+      --grid-line:rgba(233,237,232,.055);
+      --royal:#82a9ea;
+      --royal-soft:#1f2f4d;
+      color-scheme:dark;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+    background-size:26px 26px;
+    color:var(--ink);
+    font-family:'Work Sans',system-ui,sans-serif;
+    padding:20px 16px 40px;
+  }
+  .wrap{max-width:640px;margin-inline:auto;display:flex;flex-direction:column;gap:20px;}
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:1.9rem;margin:0;letter-spacing:-.01em;}
+  .lede{color:var(--ink-muted);margin:0;font-size:1rem;line-height:1.5;max-width:60ch;}
+  .games{display:grid;gap:14px;}
+  .game-card{
+    display:block;text-decoration:none;color:inherit;
+    background:var(--paper-raised);border:1px solid var(--rule);border-radius:14px;
+    padding:18px 20px;transition:border-color .15s ease,transform .1s ease;
+  }
+  .game-card:hover{border-color:var(--royal);}
+  .game-card:active{transform:scale(.99);}
+  .game-title{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.25rem;margin:0 0 4px;}
+  .game-desc{color:var(--ink-muted);font-size:.92rem;margin:0;line-height:1.5;}
+  .game-meta{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--royal);margin-top:8px;display:block;}
+  .foot{font-size:.8rem;color:var(--ink-muted);}
+  .foot a{color:var(--royal);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>German Drills</h1>
+    <p class="lede">Small, single-page browser games for drilling German grammar. No accounts, no build step — each game is one self-contained HTML file.</p>
+  </header>
+
+  <div class="games">
+    <a class="game-card" href="stammformen/">
+      <div class="game-title">Stammformen</div>
+      <p class="game-desc">Drill the Präteritum, Partizip II, and auxiliary (hat/ist) of 388 German verbs — regular and irregular, evenly balanced. Typed answers, an "Ich weiß es nicht" reveal, and per-session verb filters.</p>
+      <span class="game-meta">388 verbs · play →</span>
+    </a>
+  </div>
+
+  <p class="foot">Source on <a href="https://github.com/alioshasemionov/german-drills">GitHub</a>.</p>
+</div>
+</body>
+</html>
