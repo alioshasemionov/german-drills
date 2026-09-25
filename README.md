@@ -22,6 +22,23 @@ Play them at **https://alioshasemionov.github.io/german-drills/**
   round shows an example sentence per word (mixed tenses). Verb data lives in
   `verbnester/data.js`, separate from the game logic in `index.html`.
 
+## Planned games
+
+Placeholder pages exist for these — folder and `index.html` are live, no
+game logic yet.
+
+- **[DerDieDas](derdiedas/)** — noun gender drilling. Pick der/die/das for a
+  given noun.
+- **[Rektion](rektion/)** — prepositional and case government for verbs,
+  nouns, and adjectives. Pick the correct preposition and case for a given
+  word (warten **auf** + Akk., Angst **vor** + Dat., stolz **auf** + Akk.).
+- **[VerbCombo](verbcombo/)** — Funktionsverbgefüge (fixed noun-verb
+  collocations). Match a noun phrase to the one functional verb that fits it
+  and its plain-verb equivalent (eine Entscheidung **treffen** = entscheiden).
+- **[Teekesselchen](teekesselchen/)** — confusable words, homonyms, and
+  minimal pairs. Distinguish visually/phonetically similar words by context
+  (schon vs. schön, kennen vs. können, die Bank [bench] vs. die Bank [bank]).
+
 ## Adding a new game
 
 1. Create a new folder at the repo root, e.g. `mein-spiel/`.

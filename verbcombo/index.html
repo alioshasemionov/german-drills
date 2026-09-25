@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VerbCombo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#eef1ec; --paper-raised:#ffffff; --ink:#1b2430; --ink-muted:#5c6672;
+    --rule:#ccd3c6; --grid-line:rgba(27,36,48,.05); --royal:#1e4c9a; --royal-soft:#e3ebf9;
+    --gold:#9c7318; --gold-soft:#f6ecd8;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#131820; --paper-raised:#1b232c; --ink:#e9ede8; --ink-muted:#9aa5ad;
+      --rule:#303b46; --grid-line:rgba(233,237,232,.055); --royal:#82a9ea; --royal-soft:#1f2f4d;
+      --gold:#e0b84d; --gold-soft:#3a2f16;
+      color-scheme:dark;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background-color:var(--paper);
+    background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+    background-size:26px 26px; color:var(--ink); font-family:'Work Sans',system-ui,sans-serif;
+    padding-inline:16px; padding-block:20px 40px;
+  }
+  .wrap{max-width:560px;margin-inline:auto;display:flex;flex-direction:column;gap:20px;}
+  .back{color:var(--ink-muted);text-decoration:none;font-size:.85rem;}
+  .back:hover{color:var(--royal);}
+  .card{
+    background:var(--paper-raised);border:1px solid var(--rule);border-radius:16px;
+    padding:28px 24px;box-shadow:0 1px 2px rgba(27,36,48,.06),0 10px 28px rgba(27,36,48,.08);
+    display:grid;gap:16px;text-align:center;
+  }
+  .badge{
+    justify-self:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;
+    letter-spacing:.04em;text-transform:uppercase;color:var(--gold);background:var(--gold-soft);
+    border-radius:999px;padding:4px 12px;
+  }
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:2.2rem;margin:0;letter-spacing:-.01em;}
+  .tagline{font-style:italic;color:var(--ink-muted);font-size:1rem;margin:0;}
+  .goal{color:var(--ink);font-size:.95rem;line-height:1.6;margin:0;text-align:left;}
+  .examples{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .ex-chip{
+    font-family:'JetBrains Mono',monospace;font-size:.9rem;background:var(--royal-soft);color:var(--royal);
+    border-radius:8px;padding:8px 12px;
+  }
+  .ex-chip b{font-weight:700;}
+  .foot{font-size:.8rem;color:var(--ink-muted);text-align:center;}
+  .foot a{color:var(--royal);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../">← German Drills</a>
+  <section class="card">
+    <span class="badge">In Entwicklung</span>
+    <h1>VerbCombo</h1>
+    <p class="tagline">Funktionsverbgefüge — fixed noun-verb collocations</p>
+    <p class="goal">German often expresses an action as a noun paired with a semantically bleached "support" verb, rather than as one simple verb — and only one specific verb combines with each noun. This drill shows a noun phrase and asks you to supply the one functional verb that fits it, plus its plain single-verb equivalent.</p>
+    <div class="examples">
+      <span class="ex-chip">eine Entscheidung <b>treffen</b> = entscheiden</span>
+      <span class="ex-chip">Rücksicht <b>nehmen</b> = rücksichtsvoll sein</span>
+      <span class="ex-chip">in Kraft <b>treten</b> = gelten</span>
+    </div>
+  </section>
+  <p class="foot">Not playable yet. <a href="https://github.com/alioshasemionov/german-drills">Follow progress on GitHub</a>.</p>
+</div>
+</body>
+</html>

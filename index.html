@@ -15,6 +15,8 @@
     --grid-line:rgba(27,36,48,.05);
     --royal:#1e4c9a;
     --royal-soft:#e3ebf9;
+    --gold:#9c7318;
+    --gold-soft:#f6ecd8;
     color-scheme:light;
   }
   @media (prefers-color-scheme:dark){
@@ -27,6 +29,8 @@
       --grid-line:rgba(233,237,232,.055);
       --royal:#82a9ea;
       --royal-soft:#1f2f4d;
+      --gold:#e0b84d;
+      --gold-soft:#3a2f16;
       color-scheme:dark;
     }
   }
@@ -56,6 +60,13 @@
   .game-title{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.25rem;margin:0 0 4px;}
   .game-desc{color:var(--ink-muted);font-size:.92rem;margin:0;line-height:1.5;}
   .game-meta{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--royal);margin-top:8px;display:block;}
+  .section-label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);margin:6px 0 -4px;}
+  .game-card.upcoming .game-title{display:flex;align-items:center;gap:8px;}
+  .game-card.upcoming{opacity:.85;}
+  .badge{
+    font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--gold);background:var(--gold-soft);border-radius:999px;padding:2px 9px;
+  }
   .foot{font-size:.8rem;color:var(--ink-muted);}
   .foot a{color:var(--royal);}
 </style>
@@ -77,6 +88,26 @@
       <div class="game-title">Verbnester</div>
       <p class="game-desc">Match prefixes to meanings across 50 verb "nests" (steigen → einsteigen/aussteigen/umsteigen/…) — tap-to-place or drag-and-drop, with decoy prefixes so the last row can't be guessed by elimination.</p>
       <span class="game-meta">50 nests · 253 prefixed verbs · play →</span>
+    </a>
+  </div>
+
+  <p class="section-label">Coming soon</p>
+  <div class="games">
+    <a class="game-card upcoming" href="derdiedas/">
+      <div class="game-title">DerDieDas <span class="badge">planned</span></div>
+      <p class="game-desc">Noun gender drilling — pick der, die, or das for a given noun. No reliable rule covers most of it, so it comes down to drilling.</p>
+    </a>
+    <a class="game-card upcoming" href="rektion/">
+      <div class="game-title">Rektion <span class="badge">planned</span></div>
+      <p class="game-desc">Prepositional and case government for verbs, nouns, and adjectives — pick the correct preposition and case (warten auf + Akk., Angst vor + Dat., stolz auf + Akk.).</p>
+    </a>
+    <a class="game-card upcoming" href="verbcombo/">
+      <div class="game-title">VerbCombo <span class="badge">planned</span></div>
+      <p class="game-desc">Funktionsverbgefüge — match a noun phrase to the one functional verb that fits it, and its plain-verb equivalent (eine Entscheidung treffen = entscheiden).</p>
+    </a>
+    <a class="game-card upcoming" href="teekesselchen/">
+      <div class="game-title">Teekesselchen <span class="badge">planned</span></div>
+      <p class="game-desc">Confusable words, homonyms, and minimal pairs — schon vs. schön, kennen vs. können, die Bank (bench) vs. die Bank (bank).</p>
     </a>
   </div>
 
