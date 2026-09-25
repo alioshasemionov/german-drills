@@ -2316,9 +2316,16 @@
     return state.session.queue[state.session.index];
   }
 
+  function placeholderExample(currentInf){
+    var pool = VERBS.filter(function(v){ return v.i !== currentInf; });
+    var v = pool[Math.floor(Math.random() * pool.length)];
+    return { p: arr(v.p)[0], pp: arr(v.pp)[0] };
+  }
+
   function fieldSpec(currentInf){
-    var pPh = "z. B. zog", ppPh = "z. B. gezogen";
-    if(currentInf === "ziehen"){ pPh = "z. B. kam"; ppPh = "z. B. gekommen"; }
+    var example = placeholderExample(currentInf);
+    var pPh = "z. B. " + example.p;
+    var ppPh = "z. B. " + example.pp;
     return [
       {key:"p", label:"Präteritum (er/sie/es)", ph:pPh},
       {key:"pp", label:"Partizip II", ph:ppPh},
