@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VerbCombo</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
 <style>
   :root{
     --paper:#eef1ec;
@@ -65,6 +68,8 @@
   }
 
   *{box-sizing:border-box;}
+  /* --dock-h is set from script while the action dock is stuck, so focus/scrollIntoView clear it */
+  html{scroll-padding-bottom:var(--dock-h,0px);}
   body{
     margin:0;
     background-color:var(--paper);
@@ -87,7 +92,8 @@
   .back:focus-visible{outline:2px solid var(--royal);outline-offset:2px;border-radius:4px;}
 
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  .brand h1{font-size:1.6rem;font-weight:700;letter-spacing:-.01em;}
+  .brand{min-width:0;}
+  .brand h1{font-size:1.6rem;font-weight:700;letter-spacing:-.01em;overflow-wrap:anywhere;}
   .brand .tagline{margin:2px 0 0;font-size:.78rem;color:var(--ink-muted);letter-spacing:.03em;}
   .icon-btn{
     width:44px;height:44px;border-radius:10px;border:1px solid var(--edge);
@@ -103,14 +109,16 @@
 
   .panel{
     background:var(--paper-raised);border:1px solid var(--rule);border-radius:14px;
-    padding:16px;box-shadow:var(--shadow);display:grid;gap:14px;
+    padding:16px;box-shadow:var(--shadow);display:grid;grid-template-columns:minmax(0,1fr);gap:14px;
+    overflow-wrap:anywhere;
   }
-  .field-group{display:grid;gap:6px;}
+  .field-group{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;min-width:0;}
   .field-group label,.field-group .lbl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
   .field-row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .field-row label{min-width:0;}
   select{
     font:inherit;font-family:'Work Sans',sans-serif;padding:8px 10px;border-radius:8px;
-    border:1px solid var(--edge);background:var(--paper);color:var(--ink);min-height:44px;
+    border:1px solid var(--edge);background:var(--paper);color:var(--ink);min-height:44px;max-width:100%;
   }
   .switch{
     position:relative;width:44px;height:26px;flex:none;border-radius:999px;
@@ -137,14 +145,15 @@
   .chk:has(input:disabled) input{cursor:default;}
   .chk:has(input:focus-visible){outline:2px solid var(--royal);outline-offset:2px;}
 
-  .stats-bar{display:flex;gap:8px;}
+  .stats-bar{display:flex;flex-wrap:wrap;gap:8px;}
   .stat{
-    flex:1;background:var(--paper-raised);border:1px solid var(--rule);border-radius:12px;
+    flex:1 1 auto;background:var(--paper-raised);border:1px solid var(--rule);border-radius:12px;
     padding:7px 12px;display:flex;flex-direction:column;gap:1px;min-width:0;
   }
   .stat-label{font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
-  .stat-value{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1rem;white-space:nowrap;}
+  .stat-value{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1rem;overflow-wrap:break-word;}
   #app{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;}
+  #app>*{min-width:0;}
   .progress-track{height:6px;border-radius:999px;background:var(--rule);overflow:hidden;margin-top:-6px;}
   .progress-fill{height:100%;background:var(--royal);width:0%;transition:width .25s ease;}
   @media (max-width:360px){
@@ -166,8 +175,9 @@
   .card{
     position:relative;background:var(--paper-raised);border:1px solid var(--rule);border-radius:16px;
     padding:20px 18px 0;box-shadow:var(--shadow);display:grid;grid-template-columns:minmax(0,1fr);gap:14px;
+    overflow-wrap:anywhere;
   }
-  .card-top{text-align:center;display:grid;gap:6px;justify-items:center;padding-top:14px;}
+  .card-top{text-align:center;display:grid;grid-template-columns:minmax(0,1fr);gap:6px;justify-items:center;padding-top:14px;}
   .pill{
     position:absolute;top:12px;right:14px;
     font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.06em;
@@ -180,12 +190,13 @@
   .frame.long{font-size:clamp(1.2rem,5.1vw,1.7rem);}
   .frame.xlong{font-size:clamp(1.05rem,4.7vw,1.45rem);}
   .fl{display:block;}
-  .fl2{color:var(--ink-muted);transition:opacity .2s ease;}
-  .fl2.is-pending{opacity:.5;}
+  .fl2{color:var(--ink-muted);}
+  .fl2.is-pending .gap{border-bottom-color:var(--edge);}
   .frame .eq{font-weight:500;padding-inline:.1em .2em;}
   .frame .vb,.frame .pl{color:var(--royal);display:inline-block;}
   .frame .vb.is-ok,.frame .pl.is-ok{color:var(--good);}
   .frame .pl{color:var(--royal);}
+  .frame .vb.is-miss,.frame .pl.is-miss{color:var(--ink);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px;}
   .gap{
     display:inline-block;width:3.6em;height:.9em;vertical-align:baseline;
     border-bottom:3px dashed var(--ink-muted);margin-inline:.05em;
@@ -195,10 +206,10 @@
   @keyframes pop{from{transform:scale(.9);opacity:.35;}to{transform:none;opacity:1;}}
   .gloss{font-style:italic;color:var(--ink-muted);font-size:.92rem;line-height:1.35;text-wrap:balance;}
 
-  .steps{display:grid;grid-template-columns:1fr 1fr;gap:8px;list-style:none;margin:0;padding:0;}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,7rem),1fr));gap:8px;list-style:none;margin:0;padding:0;}
   .step{
     min-width:0;display:flex;align-items:center;gap:8px;padding:6px 10px;min-height:46px;border-radius:10px;
-    border:1px dashed var(--rule);font-size:.74rem;line-height:1.25;color:var(--ink-muted);
+    border:1px dashed var(--rule);font-size:.8125rem;line-height:1.25;color:var(--ink-muted);
     transition:background .2s ease,border-color .2s ease;
   }
   .step .mark{
@@ -206,7 +217,7 @@
     font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;border:1px solid var(--rule);
   }
   .step .txt{min-width:0;display:grid;}
-  .step .res{font-weight:600;color:var(--ink-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .step .res{font-weight:600;color:var(--ink-muted);}
   .step.is-current{border-style:solid;border-color:var(--royal);color:var(--ink);}
   .step.is-current .mark{border-color:var(--royal);color:var(--royal);}
   .step.is-current .res{color:var(--royal);}
@@ -217,15 +228,16 @@
   .step.is-bad .mark{border-color:var(--bad);background:var(--bad);color:var(--paper-raised);}
   .step.is-bad .res{color:var(--ink);}
 
-  .stage{display:grid;gap:12px;align-content:start;}
-  .stage-inner{display:grid;gap:12px;}
+  .stage{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-content:start;}
+  .stage-inner{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;}
   .stage-fade{animation:fadein .16s ease-out;}
   @keyframes fadein{from{opacity:.25;}to{opacity:1;}}
   .prompt{margin:0;text-align:center;font-size:.9rem;font-weight:600;color:var(--ink);outline:none;}
   .prompt .sub{display:block;margin-top:2px;font-size:.78rem;font-weight:500;color:var(--ink-muted);}
-  .opts{display:grid;gap:10px;grid-template-columns:1fr;}
-  .opts.two{grid-template-columns:1fr 1fr;}
-  @media (min-width:520px){ .opts{grid-template-columns:1fr 1fr;} }
+  .opts{display:grid;gap:10px;grid-template-columns:minmax(0,1fr);}
+  /* two columns while each column stays >= 7.5rem; collapses to one column at large text sizes */
+  .opts.two{grid-template-columns:repeat(auto-fit,minmax(min(100%,max(7.5rem,40%)),1fr));}
+  @media (min-width:520px){ .opts,.opts.two{grid-template-columns:repeat(2,minmax(0,1fr));} }
   .opt{
     font-family:'JetBrains Mono',monospace;font-size:.98rem;font-weight:500;text-align:left;
     display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 14px;border-radius:12px;
@@ -239,22 +251,22 @@
     flex:none;width:24px;height:24px;border-radius:7px;border:1px solid var(--rule);background:var(--paper-raised);
     display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;color:var(--ink-muted);
   }
-  .opt .w{min-width:0;overflow-wrap:break-word;}
+  .opt .w{min-width:0;overflow-wrap:anywhere;}
   @media (max-width:519px){ .opts.two .opt .k{display:none;} }
   @media (hover:none){ .opt .k{display:none;} .opts:not(.two) .opt{justify-content:flex-start;} }
 
-  .reveal{display:grid;gap:12px;text-align:left;}
+  .reveal{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;text-align:left;}
   .verdict{margin:0;text-align:center;font-size:.95rem;font-weight:600;color:var(--ink-muted);}
   .verdict.good{color:var(--good);}
   .picked{margin:-6px 0 0;text-align:center;font-size:.82rem;color:var(--ink-muted);}
-  .rv-block{display:grid;gap:8px;}
+  .rv-block{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;}
   .rv-label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);margin:0;}
   .example{
-    padding:10px 14px;border-radius:10px;background:var(--royal-soft);border:1px solid var(--rule);display:grid;gap:3px;
+    padding:10px 14px;border-radius:10px;background:var(--royal-soft);border:1px solid var(--rule);display:grid;grid-template-columns:minmax(0,1fr);gap:3px;
   }
   .example-de{font-size:.94rem;line-height:1.45;color:var(--ink);}
   .example-en{font-size:.82rem;line-height:1.4;font-style:italic;color:var(--ink-muted);}
-  mark.hl{background:transparent;color:var(--royal);font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;}
+  mark.hl{background:transparent;color:var(--royal);font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;text-decoration-skip-ink:none;}
   .note{
     margin:0;padding:10px 14px;border-radius:10px;border:1px solid var(--rule);background:var(--paper);
     font-size:.84rem;line-height:1.45;color:var(--ink);
@@ -264,9 +276,10 @@
   }
   .also b{color:var(--ink);font-family:'JetBrains Mono',monospace;font-weight:600;}
 
-  /* docked action bar: "Ich weiß es nicht" / "Weiter" always under the thumb */
+  /* action bar: "Ich weiß es nicht" / "Weiter". In normal flow by default; the script adds .dock-stuck to the card
+     (position:sticky) only when that cannot cover anything: the reveal, or options that end above the dock. */
   .dock{
-    position:sticky;bottom:0;z-index:2;margin:0 -18px;padding:10px 18px calc(12px + env(safe-area-inset-bottom,0px));
+    position:relative;z-index:2;margin:0 -18px;padding:10px 18px calc(12px + env(safe-area-inset-bottom,0px));
     background:var(--paper-raised);border-top:1px solid var(--rule);border-radius:0 0 15px 15px;
     display:grid;gap:4px;justify-items:center;
   }
@@ -274,7 +287,11 @@
     font:inherit;font-weight:600;padding:12px 28px;border-radius:999px;border:1px solid var(--royal);
     background:var(--royal);color:#fff;cursor:pointer;transition:transform .12s ease,opacity .15s ease;min-height:46px;
   }
+  .card.dock-stuck .dock{position:sticky;bottom:0;}
   .dock .btn{width:100%;max-width:420px;}
+  /* "Ich weiß es nicht" is the escape hatch, not the call to action: quiet outline, accent stays on "Weiter" */
+  #dontKnowBtn{color:var(--ink-muted);border-color:var(--edge);min-height:44px;}
+  #dontKnowBtn:hover{border-color:var(--ink-muted);color:var(--ink);}
   :root[data-theme="dark"] .btn:not(.secondary){color:#0e1420;}
   @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .btn:not(.secondary){color:#0e1420;} }
   .btn:hover{opacity:.92;}
@@ -325,7 +342,7 @@
     .opt{min-height:48px;padding-block:6px;}
     .opts{gap:8px;}
     .btn{min-height:44px;padding-block:8px;}
-    .opts.two,.opts{grid-template-columns:1fr 1fr;}
+    .opts.two,.opts{grid-template-columns:repeat(2,minmax(0,1fr));}
   }
   /* phone landscape: frame + chips left, question + options right, so answering needs no scrolling */
   @media (max-height:520px) and (min-width:560px){
@@ -346,7 +363,7 @@
 <body>
 
 <main class="wrap" lang="de">
-  <a class="back" href="../">← German Drills</a>
+  <a class="back" href="../" lang="en">← German Drills</a>
   <header class="topbar">
     <div class="brand">
       <h1>VerbCombo</h1>
@@ -355,7 +372,7 @@
     <button id="settingsBtn" class="icon-btn" type="button" aria-label="Einstellungen" aria-expanded="false" aria-controls="settingsPanel">⚙</button>
   </header>
 
-  <section id="settingsPanel" class="panel" hidden>
+  <section id="settingsPanel" class="panel" aria-label="Einstellungen" hidden>
     <div class="field-group" role="group" aria-labelledby="levelLabel">
       <span class="lbl" id="levelLabel">Niveau</span>
       <div class="chk-row" id="levelRow"></div>
@@ -404,8 +421,8 @@
       </div>
       <ol class="steps" id="steps" aria-label="Fortschritt der Karte"></ol>
       <div class="stage" id="stage"></div>
-      <div class="dock">
-        <button id="dontKnowBtn" class="btn secondary" type="button">Ich weiß es nicht <span aria-hidden="true">😢</span><span class="kk" aria-hidden="true">0</span></button>
+      <div class="dock" id="dock">
+        <button id="dontKnowBtn" class="btn secondary" type="button">Ich weiß es nicht<span class="kk" aria-hidden="true">0</span></button>
         <button id="nextBtn" class="btn" type="button" hidden>Weiter →</button>
         <p class="hint" id="dkHint"></p>
         <p class="kbd-hint" id="keyHint"></p>
@@ -702,7 +719,7 @@
   var els = {};
   ["settingsBtn","settingsPanel","levelRow","lengthSelect","translationToggle","applySettingsBtn","poolNote",
    "fatal","fatalTitle","fatalText","app","statRound","statScore","statStreak","progressFill","progressTrack","card",
-   "levelPill","frame","gloss","steps","stage","dontKnowBtn","nextBtn","dkHint","keyHint","summary","summaryTitle","summaryScore",
+   "levelPill","frame","gloss","steps","stage","dock","dontKnowBtn","nextBtn","dkHint","keyHint","summary","summaryTitle","summaryScore",
    "summaryPraise","summaryDetail","sumV","sumP","sumS","missedWrap","missedList","retryBtn","playAgainBtn","changeSettingsBtn",
    "footCount","live"].forEach(function(id){ els[id] = document.getElementById(id); });
 
@@ -793,17 +810,27 @@
     while(opts.length < 4 && pool.length){ opts.push({ t: pool.shift(), ok: false, canon: false }); }
     return shuffle(opts);
   }
+  // two columns when every option stays readable on at most two short lines
+  function shortOptions(opts){
+    return opts.every(function(o){
+      return o.t.length <= 26 && o.t.split(" ").every(function(w){ return w.length <= 12; });
+    });
+  }
   function hasAltOption(opts){
     return opts.some(function(o){ return o.ok && !o.canon; });
   }
   function makeCard(item){
-    return {
+    var card = {
       item: item, phase: 1, fresh: 0,
       v: { opts: buildOptions(item.verb, item.vAlt, item.vdecoys), picked: null, status: null, viaAlt: false },
       p: { opts: buildOptions(item.plain, item.pAlt, item.pdecoys), picked: null, status: null, viaAlt: false },
       exV: shuffle(item.ex).slice(0, 2),
       exP: shuffle(item.exPlain).slice(0, 1)
     };
+    // decided once per card, so the options do not change shape between step 1 and step 2
+    card.two = shortOptions(card.v.opts) && shortOptions(card.p.opts);
+    card.altLine = hasAltOption(card.v.opts) || hasAltOption(card.p.opts);
+    return card;
   }
 
   /* ---------- rendering ---------- */
@@ -828,12 +855,12 @@
     if(c.phase === 1){
       a.appendChild(gapNode(true));
     } else {
-      a.appendChild(el("span","vb" + (c.v.status === "ok" ? " is-ok" : "") + (c.fresh === 1 ? " pop" : ""), it.verb));
+      a.appendChild(el("span","vb" + (c.v.status === "ok" ? " is-ok" : " is-miss") + (c.fresh === 1 ? " pop" : ""), it.verb));
     }
     b.appendChild(el("span","eq","="));
     b.appendChild(document.createTextNode(" "));
     if(c.phase === 3){
-      b.appendChild(el("span","pl" + (c.p.status === "ok" ? " is-ok" : "") + (c.fresh === 2 ? " pop" : ""), it.plain));
+      b.appendChild(el("span","pl" + (c.p.status === "ok" ? " is-ok" : " is-miss") + (c.fresh === 2 ? " pop" : ""), it.plain));
     } else {
       b.appendChild(gapNode(c.phase === 2));
     }
@@ -874,12 +901,9 @@
       els.steps.appendChild(li);
     });
   }
-  function optionsNode(step){
+  function optionsNode(step, two){
     var wrap = el("div","opts"); wrap.setAttribute("role","group");
-    // two columns when every option stays readable on at most two short lines
-    if(step.opts.every(function(o){
-      return o.t.length <= 26 && o.t.split(" ").every(function(w){ return w.length <= 12; });
-    })) wrap.className += " two";
+    if(two) wrap.className += " two";
     step.opts.forEach(function(o, i){
       var b = el("button","opt"); b.type = "button"; b.dataset.i = String(i);
       var k = el("span","k", String(i+1)); k.setAttribute("aria-hidden","true");
@@ -888,9 +912,11 @@
     });
     return wrap;
   }
-  function promptNode(t, sub){
+  // sub = the hint line; hold = keep its height free (empty) so the options do not jump between steps
+  function promptNode(t, sub, hold){
     var p = el("p","prompt",t); p.id = "prompt"; p.tabIndex = -1;
     if(sub) p.appendChild(el("span","sub",sub));
+    else if(hold){ var ph = el("span","sub ph","\u00a0"); ph.setAttribute("aria-hidden","true"); p.appendChild(ph); }
     return p;
   }
   function exampleNode(ex, matcher){
@@ -977,13 +1003,13 @@
     if(c.phase === 1){
       stepNode = el("div","stage-inner");
       stepNode.appendChild(promptNode("Welches Verb passt in die Lücke?",
-        hasAltOption(c.v.opts) ? "Hier passen zwei Antworten – eine genügt." : ""));
-      stepNode.appendChild(optionsNode(c.v));
+        hasAltOption(c.v.opts) ? "Hier passen zwei Antworten – eine genügt." : "", c.altLine));
+      stepNode.appendChild(optionsNode(c.v, c.two));
     } else if(c.phase === 2){
       stepNode = el("div","stage-inner");
       stepNode.appendChild(promptNode("Wie sagt man es einfacher?",
-        hasAltOption(c.p.opts) ? "Hier passen zwei Antworten – eine genügt." : ""));
-      stepNode.appendChild(optionsNode(c.p));
+        hasAltOption(c.p.opts) ? "Hier passen zwei Antworten – eine genügt." : "", c.altLine));
+      stepNode.appendChild(optionsNode(c.p, c.two));
     } else {
       stepNode = revealNode(c);
     }
@@ -999,6 +1025,25 @@
       ? "Tastatur: Enter, Leertaste oder → = weiter"
       : "Tastatur: 1–4 wählen · 0 oder ? = Ich weiß es nicht";
     updateStats();
+    syncDock();
+  }
+  /* The dock is sticky only where that cannot hide anything: in the reveal (it keeps "Weiter" at hand and the page
+     can always be scrolled to the end, where the dock sits below the content), or while all options end above it.
+     Otherwise it stays in normal flow below the options. --dock-h feeds scroll-padding-bottom. */
+  function syncDock(){
+    var dock = els.dock, c = state.card, root = document.documentElement;
+    if(!dock || !c || els.app.hidden){ els.card.classList.remove("dock-stuck"); root.style.removeProperty("--dock-h"); return; }
+    var vh = window.innerHeight, dh = dock.offsetHeight, stick;
+    if(dh > vh * 0.35){
+      stick = false;
+    } else if(c.phase === 3){
+      stick = true;
+    } else {
+      var bottom = els.stage.getBoundingClientRect().bottom + (window.pageYOffset || 0);
+      stick = bottom + 12 <= vh - dh;
+    }
+    els.card.classList.toggle("dock-stuck", stick);
+    if(stick) root.style.setProperty("--dock-h", dh + "px"); else root.style.removeProperty("--dock-h");
   }
   function updateStats(){
     var s = state.session;
@@ -1037,8 +1082,8 @@
       renderCard();
       var pr = document.getElementById("prompt");
       if(pr) focusEl(pr);
-      say(step.status === "ok" ? (step.viaAlt ? "Verb richtig, " + c.item.verb + " ist die Standardform. " : "Verb richtig. ") :
-          (step.status === "skip" ? "Das Verb ist: " + c.item.verb + ". " : "Verb falsch. Richtig ist: " + c.item.verb + ". ") +
+      say((step.status === "ok" ? (step.viaAlt ? "Verb richtig, " + c.item.verb + " ist die Standardform. " : "Verb richtig. ") :
+          (step.status === "skip" ? "Das Verb ist: " + c.item.verb + ". " : "Verb falsch. Richtig ist: " + c.item.verb + ". ")) +
           "Schritt 2 von 2.");
     } else {
       c.phase = 3;
@@ -1209,14 +1254,23 @@
     saveSettings();
     openSettings(false);
     startSession();
+    if(state.card && !els.app.hidden) focusEl(els.frame);
   }
 
   /* ---------- keyboard ---------- */
   function onKey(ev){
     if(ev.ctrlKey || ev.metaKey || ev.altKey || ev.repeat) return;
     var t = ev.target, tag = t && t.tagName;
+    if(ev.key === "Escape" && !els.settingsPanel.hidden){
+      ev.preventDefault();
+      openSettings(false);
+      focusEl(els.settingsBtn);
+      return;
+    }
     if(tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
     if(t && els.settingsPanel.contains(t)) return;
+    // while the settings panel is open the keys belong to the panel, not to the card behind it
+    if(!els.settingsPanel.hidden) return;
     var c = state.card;
     if(!c || els.app.hidden) return;
     var k = ev.key;
@@ -1264,8 +1318,20 @@
       var items = state.session.missed.map(function(m){ return m.item; });
       startSession(items, true);
     });
-    els.changeSettingsBtn.addEventListener("click", function(){ openSettings(true); toTop(); });
+    els.changeSettingsBtn.addEventListener("click", function(){
+      openSettings(true); toTop();
+      var first = LEVELS.map(function(l){ return state.levelInputs[l]; }).filter(function(i){ return !i.disabled; })[0];
+      focusEl(first || els.settingsBtn);
+    });
     document.addEventListener("keydown", onKey);
+    window.addEventListener("resize", syncDock);
+    window.addEventListener("orientationchange", syncDock);
+    if(window.ResizeObserver){
+      var ro = new ResizeObserver(function(){ syncDock(); });
+      ro.observe(els.card);
+      ro.observe(els.dock);
+    }
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(syncDock);
   }
 
   /* ---------- boot ---------- */

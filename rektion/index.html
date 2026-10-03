@@ -7,7 +7,8 @@
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
 <style>
   :root{
     --paper:#eef1ec;
@@ -104,7 +105,7 @@
   h1,h2{font-family:'Fraunces',Georgia,serif;margin:0;}
   .wrap{max-width:640px;margin-inline:auto;display:flex;flex-direction:column;gap:12px;}
   .main{display:flex;flex-direction:column;gap:12px;min-width:0;}
-  #app{display:grid;gap:8px;min-width:0;}
+  #app{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;min-width:0;}
   .wrap > *{min-width:0;}
   .back{color:var(--ink-muted);text-decoration:none;font-size:.85rem;align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;margin-block:-10px -8px;padding-right:12px;}
   .back:hover{color:var(--royal);}
@@ -129,17 +130,17 @@
 
   .panel{
     background:var(--paper-raised);border:1px solid var(--rule);border-radius:14px;
-    padding:16px;box-shadow:var(--shadow);display:grid;gap:14px;
+    padding:16px;box-shadow:var(--shadow);display:grid;grid-template-columns:minmax(0,1fr);gap:14px;
   }
-  .field-group{display:grid;gap:6px;border:0;margin:0;padding:0;min-width:0;}
+  .field-group{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;border:0;margin:0;padding:0;min-width:0;}
   .field-group > label,.field-group > legend,.field-label{
-    font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);padding:0;
+    font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);padding:0;
   }
   .field-group > legend{margin-bottom:6px;}
-  .field-row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .field-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
   .field-row label{font-size:.9rem;}
   select{
-    font:inherit;font-family:'Work Sans',sans-serif;padding:10px 10px;border-radius:8px;min-height:44px;
+    max-width:100%;min-width:0;font:inherit;font-family:'Work Sans',sans-serif;padding:10px 10px;border-radius:8px;min-height:44px;
     border:1px solid var(--edge);background:var(--paper);color:var(--ink);
   }
   .switch{
@@ -174,23 +175,27 @@
   .chk input:checked + .box{background:var(--royal);border-color:var(--royal);}
   .chk input:checked + .box::after{content:"✓";}
   .chk:has(input:checked){border-color:var(--royal);background:var(--royal-soft);}
-  .chk:has(input:disabled){cursor:not-allowed;}
+  .chk:has(input:disabled){cursor:not-allowed;border-style:dashed;}
+  .chk:has(input:disabled)::after{
+    content:"";width:12px;height:14px;flex:none;background:var(--ink-muted);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14'%3E%3Cpath fill-rule='evenodd' d='M3 6V4a3 3 0 0 1 6 0v2h1.5v8h-9V6H3zm1.5 0h3V4a1.5 1.5 0 0 0-3 0v2z'/%3E%3C/svg%3E") center/contain no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14'%3E%3Cpath fill-rule='evenodd' d='M3 6V4a3 3 0 0 1 6 0v2h1.5v8h-9V6H3zm1.5 0h3V4a1.5 1.5 0 0 0-3 0v2z'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
   .chk input:disabled{cursor:not-allowed;}
   .chk:has(input:focus-visible){outline:2px solid var(--royal);outline-offset:2px;}
   .chk input:focus-visible + .box{outline:2px solid var(--royal);outline-offset:2px;}
   .chk:has(input:focus-visible) .box{outline:none;}
   .chk .n{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-muted);}
 
-  .stats-bar{display:flex;gap:8px;}
+  .stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,5rem),1fr));gap:8px;}
   .stat{
-    flex:1;background:var(--paper-raised);border:1px solid var(--rule);border-radius:10px;
-    padding:6px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:6px;min-width:0;
+    background:var(--paper-raised);border:1px solid var(--rule);border-radius:10px;
+    padding:6px 10px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:0 6px;min-width:0;
   }
-  .stat-label{font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
+  .stat-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
   .stat-value{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:.95rem;white-space:nowrap;}
   @media (max-width:400px){
-    .stat{flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 6px;}
-    .stat-label{font-size:.62rem;}
+    .stat{flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 6px;flex-wrap:nowrap;}
     .stat-value{font-size:.92rem;line-height:1.3;}
   }
   .progress-track{height:6px;border-radius:999px;background:var(--rule);overflow:hidden;}
@@ -198,22 +203,22 @@
 
   .card{
     background:var(--paper-raised);border:1px solid var(--rule);border-radius:16px;
-    padding:16px 18px 10px;box-shadow:var(--shadow);display:grid;gap:12px;
+    padding:16px 18px 10px;box-shadow:var(--shadow);display:grid;grid-template-columns:minmax(0,1fr);gap:12px;
   }
-  .card-top{text-align:center;display:grid;gap:4px;justify-items:center;outline:none;}
+  .card-top{text-align:center;display:grid;grid-template-columns:minmax(0,1fr);gap:4px;justify-items:center;outline:none;}
   .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
   .pill{
-    font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.04em;
+    font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:600;letter-spacing:.04em;
     text-transform:uppercase;border-radius:999px;padding:3px 10px;
   }
   .pill.kind{background:var(--royal-soft);color:var(--royal);}
   .pill.lv{border:1px solid var(--rule);color:var(--dat);}
   .stem{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:clamp(1.7rem,7vw,2.4rem);line-height:1.15;text-wrap:balance;overflow-wrap:anywhere;}
   .stem-tag{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:500;color:var(--ink);border:1px dashed var(--ink-muted);border-radius:8px;padding:1px 10px;line-height:1.5;max-width:100%;overflow-wrap:anywhere;}
-  .stem-gloss{font-style:italic;color:var(--ink-muted);font-size:.95rem;line-height:1.35;}
+  .stem-gloss{font-style:italic;color:var(--ink-muted);font-size:.95rem;line-height:1.35;overflow-wrap:anywhere;}
   .stem-gloss:empty{display:none;}
-  .sense{font-size:.8rem;color:var(--ink-muted);border:1px dashed var(--rule);border-radius:8px;padding:2px 10px;}
-  .instructions{font-size:.85rem;color:var(--ink-muted);text-align:center;margin:0;}
+  .sense{font-size:.8rem;color:var(--ink-muted);border:1px dashed var(--rule);border-radius:8px;padding:2px 10px;overflow-wrap:anywhere;max-width:100%;}
+  .instructions{font-size:.85rem;color:var(--ink-muted);text-align:center;margin:0;overflow-wrap:anywhere;}
   .instructions[hidden]{display:none;}
 
   .sentence{
@@ -221,7 +226,7 @@
     background:var(--royal-soft);border:1px solid var(--rule);display:grid;gap:5px;
   }
   .s-de{font-size:1.05rem;line-height:1.5;color:var(--ink);overflow-wrap:anywhere;}
-  .s-en{font-size:.84rem;line-height:1.4;font-style:italic;color:var(--ink-muted);}
+  .s-en{font-size:.84rem;line-height:1.4;font-style:italic;color:var(--ink-muted);overflow-wrap:anywhere;}
   .s-en:empty{display:none;}
   .gap{
     display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--royal);letter-spacing:.02em;
@@ -260,7 +265,7 @@
   .opt:active:not(:disabled){transform:scale(.985);}
   .opt:disabled{cursor:default;opacity:1;color:var(--ink);}
   .o-key{
-    font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;width:20px;height:20px;flex:none;
+    font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:600;width:20px;height:20px;flex:none;
     display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--rule);
     border-radius:6px;color:var(--ink-muted);background:var(--paper-raised);
   }
@@ -278,7 +283,7 @@
   .opt.is-dim{display:none;}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
 
-  .feedback{margin:0;font-size:.95rem;font-weight:600;text-align:left;}
+  .feedback{margin:0;font-size:.95rem;font-weight:600;text-align:left;overflow-wrap:anywhere;}
   .feedback:not(.show){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
   .feedback.show{padding:9px 14px;border-radius:10px;border:1px solid var(--rule);}
   .feedback.ok{background:var(--good-soft);border-color:var(--good);color:var(--good);}
@@ -286,11 +291,11 @@
   .feedback.skip{background:var(--royal-soft);border-color:var(--royal);color:var(--royal);}
   .feedback b{font-family:'JetBrains Mono',monospace;font-weight:700;}
 
-  .reveal{display:grid;gap:10px;text-align:left;}
-  .forms{display:grid;gap:0;margin:0;border:1px solid var(--rule);border-radius:10px;overflow:hidden;}
-  .forms > div{display:grid;grid-template-columns:5.2rem minmax(0,1fr);gap:10px;align-items:baseline;padding:8px 12px;}
+  .reveal{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;text-align:left;}
+  .forms{container-type:inline-size;display:grid;gap:0;margin:0;border:1px solid var(--rule);border-radius:10px;overflow:hidden;}
+  .forms > div{display:grid;grid-template-columns:minmax(0,5.2rem) minmax(0,1fr);gap:10px;align-items:baseline;padding:8px 12px;}
   .forms > div + div{border-top:1px solid var(--rule);}
-  .forms dt{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
+  .forms dt{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);}
   .forms dd{margin:0;font-size:.95rem;line-height:1.45;overflow-wrap:anywhere;display:grid;gap:2px;}
   .forms .mono{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.95rem;}
   .forms .wo{font-size:.9rem;line-height:1.4;}
@@ -299,11 +304,11 @@
   .hint{display:block;margin-top:1px;font-family:'Work Sans',system-ui,sans-serif;font-weight:400;font-size:.8rem;line-height:1.4;color:var(--ink-muted);}
   .forms .pp{color:var(--royal);font-weight:700;}
   .note{
-    margin:0;font-size:.85rem;line-height:1.5;padding:9px 12px;border-radius:10px;
+    margin:0;font-size:.85rem;line-height:1.5;padding:9px 12px;border-radius:10px;overflow-wrap:anywhere;
     background:var(--gold-soft);border:1px solid var(--rule);
   }
-  .note .note-label{display:block;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--dat);margin-bottom:2px;}
-  .alt-line{margin:0;font-size:.85rem;color:var(--ink-muted);}
+  .note .note-label{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--dat);margin-bottom:2px;}
+  .alt-line{margin:0;font-size:.85rem;color:var(--ink-muted);overflow-wrap:anywhere;}
   .alt-line b{font-family:'JetBrains Mono',monospace;color:var(--ink);}
 
   .card-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
@@ -312,8 +317,12 @@
     background:var(--paper-raised);border-top:1px solid var(--rule);border-radius:0 0 15px 15px;
     box-shadow:0 -10px 14px -10px rgba(27,36,48,.18);
   }
-  html{scroll-padding-bottom:84px;}
-  .opt{scroll-margin-bottom:84px;}
+  /* updateDock() sets .dock-flow when the options would not clear the pinned dock (short phones): the dock then
+     stays in normal flow at the end of the card. --dock-h is the space the pinned dock occupies (0 in flow mode). */
+  #card.dock-flow .card-actions{position:static;box-shadow:none;}
+  html{scroll-padding-bottom:calc(var(--dock-h,64px) + 12px);}
+  .opt{scroll-margin-bottom:calc(var(--dock-h,64px) + 12px);}
+  .feedback{scroll-margin-top:12px;scroll-margin-bottom:calc(var(--dock-h,64px) + 12px);}
   .btn{
     font:inherit;font-weight:600;padding:12px 28px;border-radius:999px;border:1px solid var(--royal);
     background:var(--royal);color:#fff;cursor:pointer;transition:transform .12s ease,opacity .15s ease;min-height:44px;
@@ -327,17 +336,17 @@
   .btn:disabled{opacity:.5;cursor:default;}
   :root[data-theme="dark"] .btn:not(.secondary):not(.ghost){color:#0e1420;}
   @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .btn:not(.secondary):not(.ghost){color:#0e1420;} }
-  .kbd-hint{margin:-2px 0 0;text-align:center;font-size:.72rem;color:var(--ink-muted);}
+  .kbd-hint{margin:-2px 0 0;text-align:center;font-size:.75rem;color:var(--ink-muted);}
   .kbd-hint:empty{display:none;}
   @media (hover:none){ .o-key,.kbd-hint{display:none;} }
   @media (hover:none){ #card{padding-bottom:0;} #card .card-actions{padding-bottom:calc(12px + env(safe-area-inset-bottom));} }
 
-  .summary{text-align:center;display:grid;gap:16px;}
+  .summary{text-align:center;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;}
   .summary .big-score{font-family:'JetBrains Mono',monospace;font-size:2.4rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--royal);}
   .summary .sub-score{margin:-8px 0 0;font-size:.85rem;color:var(--ink-muted);}
-  .missed-list{text-align:left;display:grid;gap:8px;}
+  .missed-list{text-align:left;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;}
   .summary .verdict{margin:-8px 0 0;font-family:'Fraunces',Georgia,serif;font-size:1.15rem;font-weight:600;}
-  .missed-item{border:1px solid var(--rule);border-radius:10px;padding:10px 12px;font-size:.9rem;display:grid;gap:3px;}
+  .missed-item{border:1px solid var(--rule);border-radius:10px;padding:10px 12px;font-size:.9rem;display:grid;grid-template-columns:minmax(0,1fr);gap:3px;overflow-wrap:anywhere;}
   .missed-item b{font-family:'JetBrains Mono',monospace;overflow-wrap:anywhere;}
   .missed-item .m-ans{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;}
   .missed-item .gl{color:var(--ink-muted);font-style:italic;font-size:.82rem;}
@@ -348,7 +357,7 @@
   .streak-flag{font-size:.82rem;color:var(--dat);font-weight:600;margin:0;}
   .streak-flag:empty{display:none;}
 
-  .notice{text-align:center;display:grid;gap:14px;justify-items:center;}
+  .notice{text-align:center;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;justify-items:center;}
   .notice h2{font-size:1.3rem;}
   .notice p{margin:0;font-size:.92rem;color:var(--ink-muted);line-height:1.5;}
 
@@ -360,6 +369,10 @@
     .card{padding-top:12px;}
   }
   @media (max-width:400px){
+    .forms > div{grid-template-columns:minmax(0,1fr);gap:2px;}
+  }
+  /* big text: stack the Da-/Wo-Form label above its value by available width (not viewport width) */
+  @container (max-width:24rem){
     .forms > div{grid-template-columns:minmax(0,1fr);gap:2px;}
   }
   @media (max-width:380px){
@@ -376,7 +389,7 @@
     .brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
     .brand h1{font-size:1.3rem;}
     .brand .tagline{display:none;}
-    .stats-bar{justify-content:center;gap:14px;}
+    .stats-bar{display:flex;flex-wrap:wrap;justify-content:center;gap:0 14px;}
     .stat{flex:none;flex-direction:row;align-items:baseline;gap:5px;padding:0;border:0;background:none;}
     .progress-track{height:4px;}
     .card{gap:8px;padding-top:10px;}
@@ -430,6 +443,7 @@
       </select>
     </div>
     <p class="panel-note" id="poolInfo" aria-live="polite"></p>
+    <p class="panel-note" id="lockNote">Mindestens ein Niveau und eine Wortart bleiben aktiv.</p>
     <p class="panel-note">Früher verfehlte Karten kommen etwas häufiger dran.</p>
     <div class="card-actions">
       <button id="applySettingsBtn" class="btn" type="button">Neue Runde starten</button>
@@ -492,6 +506,7 @@
   </section>
 
   <p class="foot" id="footCount"></p>
+  <div class="sr" id="liveStatus" role="status" aria-live="polite" aria-atomic="true"></div>
   </main>
 </div>
 
@@ -580,7 +595,7 @@
    "card","cardTop","kindPill","lvPill","stemWord","stemGloss","sense","instr","sentence","sDe","sEn",
    "options","feedback","reveal","dontKnowBtn","nextBtn","kbdHint","notice","noticeTitle","noticeText",
    "noticeBtn","summary","summaryScore","summaryVerdict","summaryDetail","summaryStreak","missedList","missedWrap","retryBtn",
-   "playAgainBtn","changeSettingsBtn","footCount"].forEach(function(id){ els[id] = document.getElementById(id); });
+   "playAgainBtn","changeSettingsBtn","footCount","liveStatus"].forEach(function(id){ els[id] = document.getElementById(id); });
 
   var defaultSettings = {translation:true, levels:LEVELS.slice(), kinds:["v","n","a","c"], length:20};
   var state = { settings: null, session: null, weak: {}, lock: 0 };
@@ -926,6 +941,7 @@
     els.kbdHint.textContent = done ? "Tastatur: Enter, Leertaste oder → = weiter"
       : "Tastatur: 1–" + n + " = wählen · 0 oder ? = Ich weiß es nicht";
     updateStats();
+    updateDock();
   }
 
   function updateStats(){
@@ -935,6 +951,22 @@
     els.statStreak.textContent = String(s.streak);
     if(s.streak >= 3){ var fl = el("span", null, " 🔥"); fl.setAttribute("aria-hidden", "true"); els.statStreak.appendChild(fl); }
     els.progressFill.style.width = Math.round((s.index / s.queue.length) * 100) + "%";
+  }
+
+  // ---- action dock -----------------------------------------------------
+  // The dock (DK / Weiter) is pinned to the bottom of the viewport only while that hides nothing: before an answer
+  // it floats only if the last option clears it at scroll position 0, otherwise it stays in flow below the options.
+  // After an answer it always floats (Weiter stays under the thumb); the reveal remains fully reachable by scrolling.
+  var dockEl = els.card.querySelector(".card-actions");
+  function updateDock(){
+    if(els.card.hidden || !dockEl) return;
+    var flow = false, h = dockEl.offsetHeight;
+    if(state.session && !answered()){
+      var opts = els.options.querySelectorAll(".opt"), last = opts[opts.length - 1];
+      if(last) flow = last.getBoundingClientRect().bottom + window.pageYOffset + 8 > window.innerHeight - h;
+    }
+    els.card.classList.toggle("dock-flow", flow);
+    document.documentElement.style.setProperty("--dock-h", (flow ? 0 : h) + "px");
   }
 
   // ---- game flow -------------------------------------------------------
@@ -954,6 +986,7 @@
     els.nextBtn.focus({preventScroll:true});
     var fr = els.feedback.getBoundingClientRect();
     if(fr.top < 8) window.scrollTo(0, window.pageYOffset + fr.top - 70);
+    else if(fr.bottom > window.innerHeight - dockEl.offsetHeight) els.feedback.scrollIntoView({block:"nearest"});
   }
   function choose(i, viaKey){
     if(!state.session || answered() || (!viaKey && Date.now() < state.lock)) return;
@@ -997,6 +1030,7 @@
     els.summaryScore.textContent = pct + "%";
     els.summaryDetail.textContent = s.score + " von " + s.total + " richtig" + (s.retry ? " (Fehler-Runde)" : "");
     els.summaryVerdict.textContent = !s.total ? "" : pct === 100 ? "Perfekt – alles richtig." : pct >= 90 ? "Stark!" : pct >= 70 ? "Gut gemacht." : pct >= 40 ? "Auf dem richtigen Weg." : "Weiter üben – es lohnt sich.";
+    els.liveStatus.textContent = pct + " Prozent, " + els.summaryDetail.textContent + (els.summaryVerdict.textContent ? ". " + els.summaryVerdict.textContent : "");
     els.summaryStreak.textContent = s.bestStreak >= 3 ? ("Beste Serie: " + s.bestStreak + " in Folge 🔥") : "";
     els.missedList.textContent = "";
     if(s.missed.length){
@@ -1054,6 +1088,7 @@
       items = pickWeighted(pool, n);
     }
     els.summary.hidden = true;
+    els.liveStatus.textContent = "";
     showHud(true);
     state.session = newSession(items, isRetry);
     state.lock = Date.now() + 300;
@@ -1095,7 +1130,10 @@
   function enforceMin(box){
     var inputs = Array.prototype.slice.call(box.querySelectorAll("input"));
     var on = inputs.filter(function(i){ return i.checked; });
-    inputs.forEach(function(i){ i.disabled = (on.length === 1 && i.checked); });
+    inputs.forEach(function(i){
+      i.disabled = (on.length === 1 && i.checked);
+      if(i.disabled) i.setAttribute("aria-describedby", "lockNote"); else i.removeAttribute("aria-describedby");
+    });
   }
   function currentUiSettings(){
     var len = els.lengthSelect.value;
@@ -1151,6 +1189,7 @@
     els.settingsPanel.hidden = !open;
     els.settingsBtn.setAttribute("aria-expanded", open ? "true" : "false");
     if(open && focusPanel){ window.scrollTo(0, 0); els.settingsPanel.focus({preventScroll:true}); }
+    updateDock();
   }
 
   function wireEvents(){
@@ -1200,7 +1239,7 @@
       var t = ev.target, tag = t && t.tagName;
       if(tag === "SELECT" || tag === "INPUT" || tag === "TEXTAREA") return;
       if(!state.session || els.card.hidden) return;
-      if(!els.settingsPanel.hidden && els.settingsPanel.contains(t)) return;
+      if(!els.settingsPanel.hidden) return;
       var k = ev.key;
       if(!answered()){
         if(k.length === 1 && k >= "1" && k <= "9"){
@@ -1237,6 +1276,12 @@
     syncSettingsUI();
     wireEvents();
     startSession();
+    window.addEventListener("resize", updateDock);
+    if(window.ResizeObserver){
+      new ResizeObserver(updateDock).observe(els.card);
+      new ResizeObserver(updateDock).observe(dockEl);
+    }
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(updateDock);
   }
 
   boot();
