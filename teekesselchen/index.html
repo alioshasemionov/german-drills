@@ -1167,7 +1167,13 @@
       if(h > window.innerHeight * 0.34){
         host.classList.add("dock-flow");
       } else if(window.getComputedStyle(dock).position === "sticky"){
-        pad = h + 8;
+        // before answering, the dock must not hide an option: if the last one would end under it, let the dock flow
+        var opts = host === els.card && !els.card.classList.contains("answered") ? els.options.querySelectorAll(".opt") : [];
+        if(opts.length && opts[opts.length - 1].getBoundingClientRect().bottom + 8 > dock.getBoundingClientRect().top){
+          host.classList.add("dock-flow");
+        } else {
+          pad = h + 8;
+        }
       }
     }
     if(pad) rootStyle.setProperty("--dock-pad", pad + "px");

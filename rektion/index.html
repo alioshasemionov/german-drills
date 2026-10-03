@@ -1239,7 +1239,7 @@
       var t = ev.target, tag = t && t.tagName;
       if(tag === "SELECT" || tag === "INPUT" || tag === "TEXTAREA") return;
       if(!state.session || els.card.hidden) return;
-      if(!els.settingsPanel.hidden && els.settingsPanel.contains(t)) return;
+      if(!els.settingsPanel.hidden) return;
       var k = ev.key;
       if(!answered()){
         if(k.length === 1 && k >= "1" && k <= "9"){
